@@ -1,0 +1,30 @@
+services:
+   bot:
+       build: .
+       command: python main.py
+       depends_on:
+         - redis
+         - database
+   redis:
+     image: redis:latest
+     restart: always
+     ports:
+     - '6379:6379'
+
+   worker:
+     restart: always
+     build: .
+     command: ['celery', '-A', 'celery_bot', 'worker', '--beat', '-l', 'INFO']
+     depends_on:
+       - database
+
+   database:
+     image: postgres:latest
+     environment:
+       POSTGRES_USER: "admin"
+       POSTGRES_PASSWORD: "admin_password"
+       POSTGRES_HOST: "postgres"
+       POSTGRES_PORT: "5432"
+       POSTGRES_DB: "db"
+     ports:
+     - "5432:5432"
