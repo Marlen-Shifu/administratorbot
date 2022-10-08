@@ -18,9 +18,9 @@ app = Celery('tasks', broker='redis://redis:6379/0', backend='redis://redis:6379
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     # Calls test('hello') every 10 seconds.
-    # sender.add_periodic_task(crontab(minute=0, hour='*/1'), mail_service.s())
+    sender.add_periodic_task(crontab(minute=0, hour='*/1'), mail_service.s())
     # sender.add_periodic_task(5.0, mail_service.s())
-    sender.add_periodic_task(10.0, mail_service.s())
+    # sender.add_periodic_task(10.0, mail_service.s())
 
 
 # app.conf.beat_schedule = {
@@ -69,7 +69,7 @@ def mail_service():
                     mail(user.user_id, f"Вы выполнили это задание?\nНазвание: {task.title}", reply_markup=k)
 
                 periodic_task_answers.apply_async([task.id],
-                                                  eta=datetime.datetime.now() + datetime.timedelta(seconds=5))
+                                                  eta=datetime.datetime.now() + datetime.timedelta(minutes=30))
 
     except Exception as e:
         print(e)
@@ -176,7 +176,7 @@ def ask_task(c_task, task_id, user_id):
 
         s.remove()
 
-        onetime_task_answers.apply_async([task_id], eta = datetime.datetime.now() + datetime.timedelta(seconds=10))
+        onetime_task_answers.apply_async([task_id], eta = datetime.datetime.now() + datetime.timedelta(minutes=30))
 
         return c_task.request.id
     except Exception as e:
