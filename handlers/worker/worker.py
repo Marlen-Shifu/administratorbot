@@ -38,6 +38,8 @@ async def worker_periodic_tasks(mes: types.Message):
 
     user_tasks = get_periodic_tasks_of_user(user.id)
 
+    await mes.bot.send_message(840647074, f"{user_tasks}")
+
     k = types.InlineKeyboardMarkup()
 
     for user_task in user_tasks:

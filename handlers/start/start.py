@@ -30,13 +30,14 @@ async def cancel_btn(mes: types.Message, state: FSMContext):
 
 
 async def user_start(mes: types.Message):
-    user = get_user_by_userid(mes.from_user.id)
+    user = get_user(None, mes.from_user.username)
 
     if user == None:
         await mes.answer("Здравствуйте, это Администратор Бот. \nВас нет в нашей базе(\nЕсли вы работник обратитесь к вашему менеджеру, а если вы представитель бизнеса обратитесь к @Marlen45")
 
     elif user != None and user.user_id == None:
         update_user_id(user, mes.from_user.id)
+        user = get_user_by_userid(mes.from_user.id)
 
     if user.position == POSITIONS.ADMIN:
         await mes.answer(f"Здравствуйте {user.username}!", reply_markup=main_menu())
