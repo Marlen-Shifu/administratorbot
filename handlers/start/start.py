@@ -30,7 +30,7 @@ async def cancel_btn(mes: types.Message, state: FSMContext):
 
 
 async def user_start(mes: types.Message):
-    user = get_user(None, mes.from_user.username)
+    user = get_user(None, username=mes.from_user.username)
 
     if user == None:
         await mes.answer("Здравствуйте, это Администратор Бот. \nВас нет в нашей базе(\nЕсли вы работник обратитесь к вашему менеджеру, а если вы представитель бизнеса обратитесь к @Marlen45")
