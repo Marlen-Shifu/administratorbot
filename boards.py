@@ -13,14 +13,12 @@ week_days = [
 
 
 day_time = [
-    ["08:00", "09:00", "10:00"],
-    ["11:00", "12:00", "13:00"],
-    ["14:00", "15:00", "16:00"],
-    ["17:00", "18:00", "19:00"],
-    ["20:00", "21:00", "22:00"],
-    ["23:00", "00:00", "01:00"],
-    ["02:00", "03:00", "04:00"],
-    ["05:00", "06:00", "07:00"],
+    ["09:00", "10:00", "11:00"],
+    ["12:00", "13:00", "14:00"],
+    ["15:00", "16:00", "17:00"],
+    ["18:00", "19:00", "20:00"],
+    ["21:00", "22:00", "23:00"],
+    ["00:00"]
 ]
 
 
@@ -65,8 +63,16 @@ def choose_week_day_table():
 def main_menu():
     k = ReplyKeyboardMarkup(resize_keyboard=True)
 
-    k.add(KeyboardButton('Добавить работника'))
-    k.row(KeyboardButton('Список одноразовых задач'), KeyboardButton('Список периодичных задач'))
-    k.row(KeyboardButton('Добавить одноразовую задачу'), KeyboardButton('Добавить периодичную задачу'))
+    k.add(KeyboardButton('Список работников'), KeyboardButton('Добавить работника'))
+    k.row(KeyboardButton('Список одноразовых задач'), KeyboardButton('Добавить одноразовую задачу'))
+    k.row(KeyboardButton('Список периодичных задач'), KeyboardButton('Добавить периодичную задачу'))
+
+    return k
+
+
+def worker_menu():
+    k = ReplyKeyboardMarkup(resize_keyboard=True)
+
+    k.row(KeyboardButton('Мои одноразовые задачи'), KeyboardButton('Мои периодичные задачи'))
 
     return k

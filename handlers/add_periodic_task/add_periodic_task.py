@@ -19,8 +19,12 @@ from celery_bot import ask_periodic_task
 
 async def add_task(mes: types.Message):
     await AddPeriodicTask.title.set()
+    
+    k = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
-    await mes.answer("Введите название задания")
+    k.add(KeyboardButton("Отмена"))
+
+    await mes.answer("Введите название задания", reply_markup=k)
 
 
 async def add_task_title(mes: types.Message, state: FSMContext):
@@ -31,6 +35,7 @@ async def add_task_title(mes: types.Message, state: FSMContext):
     k = ReplyKeyboardMarkup(resize_keyboard=True)
 
     k.add(KeyboardButton('Пусто'))
+    k.add(KeyboardButton('Отмена'))
 
     await mes.answer("Напишите описание задания задания", reply_markup=k)
 

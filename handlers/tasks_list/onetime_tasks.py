@@ -10,7 +10,7 @@ from db.operations import get_onetime_tasks, \
     get_onetime_task_users, \
     delete_periodic_task, get_task_users, delete_onetime_task_oper
 
-from states import DeleteTask
+from states import DeleteOneTimeTask
 
 
 async def onetime_tasks_list(mes: types.Message):
@@ -69,7 +69,7 @@ async def delete_onetime_task(callback: types.CallbackQuery):
 
     await callback.bot.send_message(callback.from_user.id, f"Вы уверены что хотите удалить задание \"{task.title}\"?", reply_markup=k)
 
-    await DeleteTask.confirm.set()
+    await DeleteOneTimeTask.confirm.set()
 
 
 async def delete_onetime_task_confirm(callback: types.CallbackQuery, state: FSMContext):
@@ -82,9 +82,9 @@ async def delete_onetime_task_confirm(callback: types.CallbackQuery, state: FSMC
 
         try:
             task_id = data[2]
-            delete_onetime_task_oper(task_id)
-
             task = get_task(task_id)
+
+            delete_onetime_task_oper(task_id)
 
             AsyncResult(task.task_id).revoke()
 

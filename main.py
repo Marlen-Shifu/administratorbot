@@ -24,6 +24,8 @@ def start():
     handlers.start.setup(dp)
     handlers.add_periodic_task.setup(dp)
     handlers.tasks_list.setup(dp)
+    handlers.worker.setup(dp)
+    handlers.workers.setup(dp)
     executor.start_polling(dp, skip_updates=True)
 
 
@@ -49,6 +51,24 @@ if __name__ == '__main__':
         times=['17:00'],
         creator_id=1,
         workers_list=[1]
+    )
+
+    create_task(
+        title = 'Onetimetask1',
+        description="Пусто",
+        date = "2022-10-13",
+        time = "15:00",
+        creator_id=1,
+        workers_list=[1, 2]
+    )
+
+    create_task(
+        title = 'Onetimetask2',
+        description="Пусто",
+        date = "2022-10-13",
+        time = "14:00",
+        creator_id=1,
+        workers_list=[1, 2]
     )
 
     start()

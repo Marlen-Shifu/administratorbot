@@ -30,7 +30,7 @@ async def cancel_btn(mes: types.Message, state: FSMContext):
 
 
 async def user_start(mes: types.Message):
-    user = get_user(mes.from_user.id, mes.from_user.username)
+    user = get_user_by_userid(mes.from_user.id)
 
     if user == None:
         await mes.answer("Здравствуйте, это Администратор Бот. \nВас нет в нашей базе(\nЕсли вы работник обратитесь к вашему менеджеру, а если вы представитель бизнеса обратитесь к @Marlen45")
@@ -38,7 +38,10 @@ async def user_start(mes: types.Message):
     elif user != None and user.user_id == None:
         update_user_id(user, mes.from_user.id)
 
-    await mes.answer(f"Здравствуйте {user.username}!", reply_markup=main_menu())
+    if user.position == POSITIONS.ADMIN:
+        await mes.answer(f"Здравствуйте {user.username}!", reply_markup=main_menu())
+    else:
+        await mes.answer(f"Здравствуйте {user.username}!", reply_markup=worker_menu())
 
 
 async def add_admin(mes: types.Message):
@@ -126,7 +129,7 @@ async def process_simple_calendar(callback_query: CallbackQuery, callback_data: 
 
     if selected:
 
-        if datetime.datetime.today() >= date:
+        if datetime.datetime.today().day > date.day:
             await callback_query.message.answer("Выберите будущее время)", reply_markup=await SimpleCalendar().start_calendar())
 
         else:
@@ -254,7 +257,7 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
 
         await state.finish()
 
-        await mes.answer(f"Задача успешно создана {c_task_id}", reply_markup=main_menu())
+        await mes.answer("Задача успешно создана", reply_markup=main_menu())
 
     elif mes.text == "Нет":
         await mes.answer("Сброс создания", reply_markup=main_menu())

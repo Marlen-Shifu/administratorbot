@@ -10,6 +10,8 @@ services:
      restart: always
      ports:
      - '6379:6379'
+     depends_on:
+       - database
 
    worker:
      restart: always
@@ -17,6 +19,7 @@ services:
      command: ['celery', '-A', 'celery_bot', 'worker', '--beat', '-l', 'INFO']
      depends_on:
        - database
+       - redis
 
    database:
      image: postgres:latest

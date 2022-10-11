@@ -33,3 +33,12 @@ class AddPeriodicTask(StatesGroup):
 
 class DeleteTask(StatesGroup):
     confirm = State()
+
+
+class DeleteOneTimeTask(StatesGroup):
+    confirm = State()
+
+
+class DeleteWorker(StatesGroup):
+    confirm = State()
+

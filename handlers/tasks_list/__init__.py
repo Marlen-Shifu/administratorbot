@@ -28,5 +28,5 @@ def setup(dp: Dispatcher):
     dp.register_callback_query_handler(onetime_task, lambda c: c.data.startswith('inf_o_task'))
     dp.register_callback_query_handler(onetimetask_answers, lambda c: c.data.startswith('answers_o_task'))
     dp.register_callback_query_handler(delete_onetime_task, lambda c: c.data.startswith('delete_o_task'))
-    dp.register_callback_query_handler(delete_onetime_task_confirm, state=DeleteTask.confirm)
+    dp.register_callback_query_handler(delete_onetime_task_confirm, state=DeleteOneTimeTask.confirm)
 

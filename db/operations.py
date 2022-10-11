@@ -291,3 +291,69 @@ def delete_onetime_task_oper(task_id):
         raise e
 # create_periodic_task("Marlen45", POSITIONS.ADMIN, id=840647074)
 # create_periodic_task("Marlen45", POSITIONS.WORKER, id=840647074)
+
+def get_all_onetime_task_users():
+    try:
+        res = s.query(OneTimeTaskUser).all()
+
+        return res
+    except Exception as e:
+        print(e)
+        raise e
+
+def get_onetime_task_users_of_user(user_id):
+    try:
+        res = s.query(OneTimeTaskUser).filter_by(worker_id = user_id)
+
+        return res
+    except Exception as e:
+        print(e)
+        raise e
+
+
+def get_onetime_tasks_of_user(user_id):
+    try:
+
+        task_users = get_onetime_task_users_of_user(user_id)
+
+        user_tasks = [get_task(user_task_user.task_id) for user_task_user in task_users]
+
+        return user_tasks
+
+    except Exception as e:
+        print(e)
+        raise e
+
+
+def get_periodic_task_users_of_user(user_id):
+    try:
+        res = s.query(PeriodicTaskUser).filter_by(worker_id = user_id)
+
+        return res
+    except Exception as e:
+        print(e)
+        raise e
+
+
+def get_periodic_tasks_of_user(user_id):
+    try:
+
+        task_users = get_periodic_task_users_of_user(user_id)
+
+        user_tasks = [get_periodic_task(user_task_user.task_id) for user_task_user in task_users]
+
+        return user_tasks
+
+    except Exception as e:
+        print(e)
+        raise e
+
+
+def delete_worker(worker_id):
+    try:
+        worker = get_user(worker_id)
+        s.delete(worker)
+        s.commit()
+    except Exception as e:
+        print(e)
+        raise e
