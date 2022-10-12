@@ -21,7 +21,7 @@ async def onetime_tasks_list(mes: types.Message):
     for task in tasks:
         k.add(types.InlineKeyboardButton(task.title, callback_data=f"inf_o_task {task.id}"))
 
-    await mes.answer("Список периодичных задач", reply_markup=k)
+    await mes.answer("Список одноразовых задач", reply_markup=k)
 
 
 async def onetime_task(callback: types.CallbackQuery):
