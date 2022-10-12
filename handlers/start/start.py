@@ -248,7 +248,11 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
 
             mail(worker.user_id, f"Вам назначили задание:\n{data.get('title')}")
 
+        offset = datetime.timedelta(hours=6)
+        timez = datetime.timezone(offset)
         date_time = datetime.datetime.strptime(data.get('day') + ", " + data.get('time'), "%Y-%m-%d, %H:%M")
+
+        date_time = date_time + offset
 
             # run_time = datetime.datetime.now() + datetime.timedelta(seconds=3)
 
