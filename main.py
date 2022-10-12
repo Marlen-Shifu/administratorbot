@@ -30,7 +30,7 @@ def start():
 
 
 if __name__ == '__main__':
-    add_user("Marlen45", POSITIONS.ADMIN, id=840647074)
+    # add_user("Marlen45", POSITIONS.ADMIN, id=840647074)
 
     add_user("Marlen45", POSITIONS.WORKER, id=840647074)
 
