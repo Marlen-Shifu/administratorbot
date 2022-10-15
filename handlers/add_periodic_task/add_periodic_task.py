@@ -64,7 +64,7 @@ async def process_simple_calendar(callback_query: CallbackQuery, state: FSMConte
         choosen_days = state_data.get('days')
 
         k = InlineKeyboardMarkup()
-        k.add(InlineKeyboardButton("Закончить", callback_data='finish'))
+        k.add(InlineKeyboardButton("Продолжить", callback_data='finish'))
 
         if data == 'work_days':
             new_days_list = [0, 1, 2, 3, 4]
@@ -118,7 +118,7 @@ async def add_task_time(callback_query: CallbackQuery, state: FSMContext):
             if data in g:
 
                 k = InlineKeyboardMarkup()
-                k.add(InlineKeyboardButton("Закончить", callback_data='finish'))
+                k.add(InlineKeyboardButton("Продолжить", callback_data='finish'))
 
                 state_data = await state.get_data()
 
@@ -172,7 +172,7 @@ async def add_task_workers(callback_query: CallbackQuery, state: FSMContext):
         workers = task_data.get('workers')
 
         k = InlineKeyboardMarkup()
-        k.add(InlineKeyboardButton("Закончить", callback_data='finish'))
+        k.add(InlineKeyboardButton("Продолжить", callback_data='finish'))
 
         if data == 'all_workers':
             new_workers_list = []

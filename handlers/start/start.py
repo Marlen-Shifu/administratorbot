@@ -175,7 +175,7 @@ async def add_task_workers(callback_query: CallbackQuery, state:FSMContext):
         workers = task_data.get('workers')
 
         k = InlineKeyboardMarkup()
-        k.add(InlineKeyboardButton("Закончить", callback_data='finish'))
+        k.add(InlineKeyboardButton("Продолжить", callback_data='finish'))
 
 
         if workers != None:
@@ -252,7 +252,7 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
         timez = datetime.timezone(offset)
         date_time = datetime.datetime.strptime(data.get('day') + ", " + data.get('time'), "%Y-%m-%d, %H:%M")
 
-        date_time = date_time + offset
+        date_time = date_time - offset
 
             # run_time = datetime.datetime.now() + datetime.timedelta(seconds=3)
 
