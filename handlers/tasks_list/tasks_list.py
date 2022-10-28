@@ -169,8 +169,8 @@ async def task_answers(callback: types.CallbackQuery):
 
     def user_is_answered(user, answers_list):
         for answer in answers_list:
-            print(answer)
-            print(user.id)
+            await callback.bot.send_message(callback.from_user.id, f"{answer}")
+            await callback.bot.send_message(callback.from_user.id, f"{user.id}")
             if user.id == answer['user_id']:
                 return True
 
