@@ -176,8 +176,6 @@ async def task_answers(callback: types.CallbackQuery):
         return False
 
     for task_user in task_users:
-        await callback.bot.send_message(callback.from_user.id, f"{task_user.id}")
-        await callback.bot.send_message(callback.from_user.id, f"{task_answers}")
         if user_is_answered(task_user, task_answers):
             continue
         else:

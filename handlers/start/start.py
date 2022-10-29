@@ -291,13 +291,21 @@ async def answer_to_task(callback: types.CallbackQuery):
         await callback.bot.send_message(callback.from_user.id, f'Вы уже ответили на данное задание')
 
     else:
-        if answers is None:
-            answers = [{"user_id": user.id, "answer": f"{answer}"}]
-        else:
-            answers.append({"user_id": user.id, "answer": f"{answer}"})
 
-        update_onetime_task_answers(task_id, answers)
+        state = await TaskAnswer.comment.set()
 
-        await callback.bot.send_message(callback.from_user.id, f'Ответ записан. Спасибо)')
+        await state.update(answer = f'{answer}')
+
+        await callback.bot.send_message(callback.from_user.id, f'Оставьте комментарий')
+
+
+        # if answers is None:
+        #     answers = [{"user_id": user.id, "answer": f"{answer}"}]
+        # else:
+        #     answers.append({"user_id": user.id, "answer": f"{answer}"})
+        #
+        # update_onetime_task_answers(task_id, answers)
+        #
+        # await callback.bot.send_message(callback.from_user.id, f'Ответ записан. Спасибо)')
 
 

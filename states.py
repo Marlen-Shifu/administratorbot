@@ -42,3 +42,7 @@ class DeleteOneTimeTask(StatesGroup):
 class DeleteWorker(StatesGroup):
     confirm = State()
 
+
+class TaskAnswer(StatesGroup):
+    answer = State()
+    comment = State()
