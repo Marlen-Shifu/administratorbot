@@ -176,7 +176,7 @@ async def onetimetask_answers(callback: types.CallbackQuery):
     if len(not_answered) > 0:
         counter = 1
         for answer in not_answered:
-            send_text += f"\n        {counter}. {username}"
+            send_text += f"\n        {counter}. {answer.username}"
             counter += 1
     else:
         send_text += "\n        Нету"
