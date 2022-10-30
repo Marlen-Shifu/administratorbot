@@ -318,5 +318,9 @@ async def answer_to_task(callback: types.CallbackQuery):
 
 async def comment_task(mes: types.Message):
 
-    await mes.answer(f"{mes.content_type}")
+    if mes.content_type == 'text':
+        await mes.answer('text')
 
+    elif mes.content_type == 'photo' or mes.content_type == 'document':
+        await mes.answer(f'{mes.photo[-1].file_id}')
+        await mes.answer_photo(mes.photo[-1].file_id)
