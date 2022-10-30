@@ -42,4 +42,4 @@ def setup(dp: Dispatcher):
 
     dp.register_callback_query_handler(answer_to_task, lambda c:c.data.startswith('ans_to_o_t'))
 
-    dp.register_callback_query_handler(comment_task, state=TaskAnswer.comment)
+    dp.register_message_handler(comment_task, state=TaskAnswer.comment)
