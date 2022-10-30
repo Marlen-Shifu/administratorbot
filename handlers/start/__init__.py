@@ -19,7 +19,8 @@ from .start import user_start,\
     add_task_workers,\
     add_task_confirm,\
     cancel_btn, \
-    answer_to_task
+    answer_to_task, \
+    comment_task
 
 
 
@@ -40,3 +41,5 @@ def setup(dp: Dispatcher):
     dp.register_message_handler(add_task_confirm, state=AddOneTimeTask.confirm)
 
     dp.register_callback_query_handler(answer_to_task, lambda c:c.data.startswith('ans_to_o_t'))
+
+    dp.register_callback_query_handler(comment_task, state=TaskAnswer.comment)

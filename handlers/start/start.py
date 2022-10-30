@@ -3,7 +3,7 @@ from celery_bot import ask_task
 
 from datetime import datetime
 
-from aiogram import types
+from aiogram import types, Dispatcher
 
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery
@@ -292,9 +292,12 @@ async def answer_to_task(callback: types.CallbackQuery):
 
     else:
 
-        state = await TaskAnswer.comment.set()
+        await TaskAnswer.comment.set()
 
-        await state.update(answer = f'{answer}')
+        state = Dispatcher.get_current().current_state()
+
+        await state.update_data(task_id = task_id)
+        await state.update_data(answer = answer)
 
         await callback.bot.send_message(callback.from_user.id, f'Оставьте комментарий')
 
@@ -306,6 +309,14 @@ async def answer_to_task(callback: types.CallbackQuery):
         #
         # update_onetime_task_answers(task_id, answers)
         #
-        # await callback.bot.send_message(callback.from_user.id, f'Ответ записан. Спасибо)')
+        # k = InlineKeyboardMarkup()
+        #
+        # k.add(InlineKeyboardButton('Оставить комментарий', callback_data=f'comment_task {task_id}'))
+        #
+        # await callback.bot.send_message(callback.from_user.id, f'Ответ записан. Спасибо)', reply_markup=k)
 
+
+async def comment_task(mes: types.Message):
+
+    await mes.answer(f"{mes.content_type}")
 
