@@ -316,11 +316,29 @@ async def answer_to_task(callback: types.CallbackQuery):
         # await callback.bot.send_message(callback.from_user.id, f'Ответ записан. Спасибо)', reply_markup=k)
 
 
-async def comment_task(mes: types.Message):
+async def comment_task(mes: types.Message, state: FSMContext):
+
+    data = await state.get_data()
+
+    task_id = data.get('task_id')
+    task = get_task(task_id)
+
+    answer = data.get('answer')
+
+    answers = task.get_answers()
+
+    user = get_worker_by_userid(mes.from_user.id)
 
     if mes.content_type == 'text':
-        await mes.answer('text')
+        value = mes.text
+    elif mes.content_type == 'photo':
+        value = mes.photo[-1].file_id
 
-    elif mes.content_type == 'photo' or mes.content_type == 'document':
-        await mes.answer(f'{mes.photo[-1].file_id}')
-        await mes.answer_photo(mes.photo[-1].file_id)
+    if answers is None:
+        answers = [{"user_id": user.id, "answer": f"{answer}", "type": mes.content_type, "value": value}]
+    else:
+        answers.append({"user_id": user.id, "answer": f"{answer}", "type": mes.content_type, "value": value})
+
+    update_onetime_task_answers(task_id, answers)
+
+    await mes.answer('Ответ записан. Спасибо)')

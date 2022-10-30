@@ -182,3 +182,4 @@ async def onetimetask_answers(callback: types.CallbackQuery):
         send_text += "\n        Нету"
 
     await callback.bot.send_message(callback.from_user.id, send_text)
+    await callback.bot.send_message(callback.from_user.id, task_answers)

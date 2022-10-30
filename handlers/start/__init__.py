@@ -44,3 +44,4 @@ def setup(dp: Dispatcher):
 
     dp.register_message_handler(comment_task, state=TaskAnswer.comment, content_types=types.ContentType.all())
 
+
