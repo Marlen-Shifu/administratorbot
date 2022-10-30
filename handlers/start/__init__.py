@@ -1,4 +1,4 @@
-
+from aiogram import types
 from aiogram.dispatcher import Dispatcher
 
 from states import *
@@ -42,5 +42,5 @@ def setup(dp: Dispatcher):
 
     dp.register_callback_query_handler(answer_to_task, lambda c:c.data.startswith('ans_to_o_t'))
 
-    dp.register_message_handler(comment_task, state=TaskAnswer.comment, content_types='*')
+    dp.register_message_handler(comment_task, state=TaskAnswer.comment, content_types=types.ContentType.all())
 
