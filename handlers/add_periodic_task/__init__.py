@@ -1,4 +1,4 @@
-
+from aiogram import types
 from aiogram.dispatcher import Dispatcher
 
 from states import *
@@ -12,7 +12,8 @@ from .add_periodic_task import add_task,\
     add_task_time,\
     add_task_workers,\
     add_task_confirm,\
-    answer_to_task
+    answer_to_task, \
+    comment_task
 
 
 
@@ -26,3 +27,4 @@ def setup(dp: Dispatcher):
     dp.register_message_handler(add_task_confirm, state=AddPeriodicTask.confirm)
 
     dp.register_callback_query_handler(answer_to_task, lambda c: c.data.startswith('ans_to_p_t'))
+    dp.register_message_handler(comment_task, state=TaskAnswer.comment, content_types=types.ContentType.all())

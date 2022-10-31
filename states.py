@@ -46,3 +46,8 @@ class DeleteWorker(StatesGroup):
 class TaskAnswer(StatesGroup):
     answer = State()
     comment = State()
+
+
+class PeriodicTaskAnswer(StatesGroup):
+    answer = State()
+    comment = State()

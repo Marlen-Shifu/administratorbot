@@ -9,7 +9,7 @@ from aiogram.utils.callback_data import CallbackData
 from boards import workers_board, day_time_board, day_time, main_menu
 from db.operations import get_user, get_user_by_userid, create_periodic_task, get_all_workers, get_periodic_task, \
     update_task_answers, get_worker_by_userid
-from states import AddPeriodicTask, TaskAnswer
+from states import AddPeriodicTask, PeriodicTaskAnswer
 from utils.mailing.mail import mail
 
 from boards import choose_week_day_table, week_days
@@ -305,7 +305,7 @@ async def answer_to_task(callback: types.CallbackQuery):
 
     else:
 
-        await TaskAnswer.comment.set()
+        await PeriodicTaskAnswer.comment.set()
 
         state = Dispatcher.get_current().current_state()
 
