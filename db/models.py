@@ -115,7 +115,20 @@ class PeriodicTask(Base):
 
         return False
 
+    def get_user_comment(self, user_id):
 
+        answers = self.get_answers()
+
+        if answers == None:
+            return None
+
+        for answer in answers:
+            if answer['user_id'] == user_id:
+                return answer
+
+        return None
+
+    
 class PeriodicTaskUser(Base):
     __tablename__ = 'periodictask_user'
 
