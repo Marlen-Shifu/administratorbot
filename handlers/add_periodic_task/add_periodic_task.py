@@ -1,6 +1,6 @@
 import datetime
 
-from aiogram import types
+from aiogram import types, Dispatcher
 
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, CallbackQuery
@@ -9,7 +9,7 @@ from aiogram.utils.callback_data import CallbackData
 from boards import workers_board, day_time_board, day_time, main_menu
 from db.operations import get_user, get_user_by_userid, create_periodic_task, get_all_workers, get_periodic_task, \
     update_task_answers, get_worker_by_userid
-from states import AddPeriodicTask
+from states import AddPeriodicTask, TaskAnswer
 from utils.mailing.mail import mail
 
 from boards import choose_week_day_table, week_days
@@ -304,13 +304,56 @@ async def answer_to_task(callback: types.CallbackQuery):
         await callback.bot.send_message(callback.from_user.id, f'Вы уже ответили на данное задание')
 
     else:
-        if answers is None:
-            answers = [{"user_id": user.id, "answer": f"{answer}"}]
-        else:
-            answers.append({"user_id": user.id, "answer": f"{answer}"})
 
-        update_task_answers(task_id, answers)
+        await TaskAnswer.comment.set()
 
-        await callback.bot.send_message(callback.from_user.id, f'Ответ записан. Спасибо)')
+        state = Dispatcher.get_current().current_state()
+
+        await state.update_data(task_id=task_id)
+        await state.update_data(answer=answer)
+
+        k = ReplyKeyboardMarkup()
+        k.add(KeyboardButton('Пусто'))
+        k.add(KeyboardButton('Отмена'))
+
+        await callback.bot.send_message(callback.from_user.id, f'Оставьте комментарий', reply_markup=k)
+
+    # else:
+    #     if answers is None:
+    #         answers = [{"user_id": user.id, "answer": f"{answer}"}]
+    #     else:
+    #         answers.append({"user_id": user.id, "answer": f"{answer}"})
+    #
+    #     update_task_answers(task_id, answers)
+    #
+    #     await callback.bot.send_message(callback.from_user.id, f'Ответ записан. Спасибо)')
 
 
+async def comment_task(mes: types.Message, state: FSMContext):
+
+    data = await state.get_data()
+
+    task_id = data.get('task_id')
+    task = get_periodic_task(task_id)
+
+    answer = data.get('answer')
+
+    answers = task.get_answers()
+
+    user = get_worker_by_userid(mes.from_user.id)
+
+    if mes.content_type == 'text':
+        value = mes.text
+    elif mes.content_type == 'photo':
+        value = mes.photo[-1].file_id
+
+    if answers is None:
+        answers = [{"user_id": user.id, "answer": f"{answer}", "type": mes.content_type, "value": value}]
+    else:
+        answers.append({"user_id": user.id, "answer": f"{answer}", "type": mes.content_type, "value": value})
+
+    update_task_answers(task_id, answers)
+
+    await mes.answer('Ответ записан. Спасибо)')
+
+    await state.finish()

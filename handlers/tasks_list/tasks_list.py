@@ -146,7 +146,7 @@ async def task_answers(callback: types.CallbackQuery):
 
         counter = 1
         for answer in answers_yes:
-            send_text += f"\n        {counter}. {get_user(answer['user_id']).username}"
+            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /task_comment_{task_id}_{answer['user_id']}"
             counter += 1
     else:
         send_text += "\n        Нету"
@@ -192,3 +192,32 @@ async def task_answers(callback: types.CallbackQuery):
         send_text += "\n        Нету"
 
     await callback.bot.send_message(callback.from_user.id, send_text)
+
+
+async def task_comment(mes: types.Message):
+    data = mes.text.split('_')
+
+    task_id = data[2]
+    user_id = data[3]
+
+    task = get_periodic_task(task_id)
+    user = get_user(user_id)
+
+    user_comment = task.get_user_comment(int(user_id))
+
+    if user_comment:
+
+        if user_comment['type'] == 'text':
+            send_text = f'Пользователь {user.username} оставил текстовое сообщение'
+            await mes.answer(send_text)
+
+            await mes.answer(user_comment['value'])
+
+        elif user_comment['type'] == 'photo':
+            send_text = f'Пользователь {user.username} оставил фотографию'
+            await mes.answer(send_text)
+
+            await mes.answer_photo(user_comment['value'])
+
+    else:
+        await mes.answer('Ошибочка(... нету комментария')

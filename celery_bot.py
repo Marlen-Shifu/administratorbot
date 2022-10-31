@@ -8,7 +8,7 @@ from celery.schedules import crontab
 
 from db.models import User, OneTimeTaskUser, PeriodicTask, PeriodicTaskUser, db_session as s
 
-from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks
+from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks, update_task_answers
 
 from utils.mailing.mail import mail
 
@@ -18,9 +18,9 @@ app = Celery('tasks', broker='redis://redis:6379/0', backend='redis://redis:6379
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(crontab(minute=0, hour='*/1'), mail_service.s())
+    # sender.add_periodic_task(crontab(minute=0, hour='*/1'), mail_service.s())
     # sender.add_periodic_task(5.0, mail_service.s())
-    # sender.add_periodic_task(10.0, mail_service.s())
+    sender.add_periodic_task(10.0, mail_service.s())
 
 
 # app.conf.beat_schedule = {
@@ -151,6 +151,8 @@ def periodic_task_answers(task_id):
             send_text += "\n        Нету"
 
         mail(creator.user_id, send_text)
+
+        update_task_answers(task_id, [])
 
     except Exception as e:
         print(e)

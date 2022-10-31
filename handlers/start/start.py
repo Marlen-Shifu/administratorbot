@@ -299,7 +299,11 @@ async def answer_to_task(callback: types.CallbackQuery):
         await state.update_data(task_id = task_id)
         await state.update_data(answer = answer)
 
-        await callback.bot.send_message(callback.from_user.id, f'Оставьте комментарий')
+        k = ReplyKeyboardMarkup()
+        k.add(KeyboardButton('Пусто'))
+        k.add(KeyboardButton('Отмена'))
+
+        await callback.bot.send_message(callback.from_user.id, f'Оставьте комментарий', reply_markup=k)
 
 
         # if answers is None:
