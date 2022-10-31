@@ -54,6 +54,19 @@ class OneTimeTask(Base):
 
         return False
 
+    def get_user_comment(self, user_id):
+
+        answers = self.get_answers()
+
+        if answers == None:
+            return None
+
+        for answer in answers:
+            if answer['user_id'] == user_id:
+                return (answer['type'], answer['value'])
+
+        return None
+
 
 class OneTimeTaskUser(Base):
     __tablename__ = 'onetimetask_user'

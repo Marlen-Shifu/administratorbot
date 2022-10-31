@@ -14,7 +14,8 @@ from .onetime_tasks import onetime_tasks_list,\
     onetime_task,\
     delete_onetime_task,\
     delete_onetime_task_confirm,\
-    onetimetask_answers
+    onetimetask_answers, \
+    task_comment
 
 
 def setup(dp: Dispatcher):
@@ -30,3 +31,4 @@ def setup(dp: Dispatcher):
     dp.register_callback_query_handler(delete_onetime_task, lambda c: c.data.startswith('delete_o_task'))
     dp.register_callback_query_handler(delete_onetime_task_confirm, state=DeleteOneTimeTask.confirm)
 
+    dp.register_message_handler(task_comment, lambda mes: mes.startswith('/task_comment'))
