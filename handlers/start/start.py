@@ -345,6 +345,6 @@ async def comment_task(mes: types.Message, state: FSMContext):
 
     update_onetime_task_answers(task_id, answers)
 
-    await mes.answer('Ответ записан. Спасибо)')
+    await mes.answer('Ответ записан. Спасибо)', reply_markup=main_menu())
 
     await state.finish()

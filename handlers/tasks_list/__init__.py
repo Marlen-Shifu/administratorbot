@@ -8,7 +8,8 @@ from .tasks_list import periodic_tasks_list,\
     periodic_task,\
     delete_task,\
     delete_task_confirm,\
-    task_answers
+    task_answers, \
+    periodic_task_comment
 
 from .onetime_tasks import onetime_tasks_list,\
     onetime_task,\
@@ -32,3 +33,4 @@ def setup(dp: Dispatcher):
     dp.register_callback_query_handler(delete_onetime_task_confirm, state=DeleteOneTimeTask.confirm)
 
     dp.register_message_handler(task_comment, lambda mes: mes.text.startswith('/task_comment'))
+    dp.register_message_handler(periodic_task_comment, lambda mes: mes.text.startswith('/ptask_comment'))
