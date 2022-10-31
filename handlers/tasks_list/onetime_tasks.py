@@ -195,7 +195,7 @@ async def task_comment(mes: types.Message):
 
     user_comment = task.get_user_comment(user_id)
     await mes.answer(user_id)
-    await mes.answer(task.get_asnwers())
+    await mes.answer(task.get_answers())
 
     if user_comment:
 
