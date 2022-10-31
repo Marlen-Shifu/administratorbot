@@ -63,7 +63,7 @@ class OneTimeTask(Base):
 
         for answer in answers:
             if answer['user_id'] == user_id:
-                return (answer['type'], answer['value'])
+                return answer
 
         return None
 
