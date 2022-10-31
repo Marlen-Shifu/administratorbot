@@ -193,7 +193,7 @@ async def task_comment(mes: types.Message):
     task = get_task(task_id)
     user = get_user(user_id)
 
-    user_comment = task.get_user_comment(user_id)
+    user_comment = task.get_user_comment(int(user_id))
     await mes.answer(user_id)
     await mes.answer(task.get_answers())
 
