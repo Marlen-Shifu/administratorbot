@@ -254,9 +254,9 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
 
         date_time = date_time - offset
 
-        run_time = datetime.datetime.now() + datetime.timedelta(seconds=3)
+        # run_time = datetime.datetime.now() + datetime.timedelta(seconds=3)
 
-        c_task_id = ask_task.apply_async((task_id, mes.from_user.id), eta=run_time)
+        c_task_id = ask_task.apply_async((task_id, mes.from_user.id), eta=date_time)
 
         update_celery_task_id(task_id, c_task_id)
 

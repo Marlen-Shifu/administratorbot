@@ -128,7 +128,7 @@ class PeriodicTask(Base):
 
         return None
 
-    
+
 class PeriodicTaskUser(Base):
     __tablename__ = 'periodictask_user'
 
