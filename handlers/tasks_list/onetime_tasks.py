@@ -137,7 +137,7 @@ async def onetimetask_answers(callback: types.CallbackQuery):
 
         counter = 1
         for answer in answers_yes:
-            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /task_comment {task_id} {answer['user_id']}"
+            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /task_comment_{task_id}_{answer['user_id']}"
             counter += 1
     else:
         send_text += "\n        Нету"
@@ -185,10 +185,10 @@ async def onetimetask_answers(callback: types.CallbackQuery):
 
 
 async def task_comment(mes: types.Message):
-    data = mes.text.split(' ')
+    data = mes.text.split('_')
 
-    task_id = data[1]
-    user_id = data[2]
+    task_id = data[2]
+    user_id = data[3]
 
     task = get_task(task_id)
     user = get_user(user_id)
