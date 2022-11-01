@@ -12,7 +12,7 @@ from db.operations import get_task, get_task_users, get_user, get_periodic_task,
 
 from utils.mailing.mail import mail
 
-app = Celery('tasks', broker='redis://redis:6379/0', backend='redis://redis:6379/1')
+app = Celery('tasks', broker='redis://:RedisPass@redis:6379/0', backend='redis://:RedisPass@redis:6379/1')
 
 
 @app.on_after_configure.connect
