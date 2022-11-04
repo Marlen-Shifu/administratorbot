@@ -198,17 +198,17 @@ async def task_comment(mes: types.Message):
 
     if user_comment:
 
-        if user_comment.type == 'text':
+        if user_comment.answer_type == 'text':
             send_text = f'Пользователь {user.username} оставил текстовое сообщение'
             await mes.answer(send_text)
 
-            await mes.answer(user_comment.value)
+            await mes.answer(user_comment.answer_value)
 
-        elif user_comment.type == 'photo':
+        elif user_comment.answer_type == 'photo':
             send_text = f'Пользователь {user.username} оставил фотографию'
             await mes.answer(send_text)
 
-            await mes.answer_photo(user_comment.value)
+            await mes.answer_photo(user_comment.answer_value)
 
     else:
         await mes.answer('Ошибочка(... нету комментария')
