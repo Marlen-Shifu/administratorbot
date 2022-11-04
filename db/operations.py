@@ -361,7 +361,7 @@ def delete_worker(worker_id):
 
 def get_onetime_task_answers(task_id):
     try:
-        answers = s.query(OneTimeTaskAnswer).filter(task_id = task_id)
+        answers = s.query(OneTimeTaskAnswer).filter_by(task_id = task_id)
 
         return answers
     except Exception as e:
