@@ -8,7 +8,8 @@ from db.operations import get_onetime_tasks, \
     get_task, \
     get_user, \
     get_onetime_task_users, \
-    delete_periodic_task, get_task_users, delete_onetime_task_oper, get_onetime_task_answers
+    delete_periodic_task, get_task_users, delete_onetime_task_oper, get_onetime_task_answers, \
+    get_onetime_task_user_answer
 
 from states import DeleteOneTimeTask
 
@@ -193,21 +194,21 @@ async def task_comment(mes: types.Message):
     task = get_task(task_id)
     user = get_user(user_id)
 
-    user_comment = task.get_user_comment(int(user_id))
+    user_comment = get_onetime_task_user_answer(task_id, user_id)
 
     if user_comment:
 
-        if user_comment['type'] == 'text':
+        if user_comment.type == 'text':
             send_text = f'Пользователь {user.username} оставил текстовое сообщение'
             await mes.answer(send_text)
 
-            await mes.answer(user_comment['value'])
+            await mes.answer(user_comment.value)
 
-        elif user_comment['type'] == 'photo':
+        elif user_comment.type == 'photo':
             send_text = f'Пользователь {user.username} оставил фотографию'
             await mes.answer(send_text)
 
-            await mes.answer_photo(user_comment['value'])
+            await mes.answer_photo(user_comment.value.)
 
     else:
         await mes.answer('Ошибочка(... нету комментария')

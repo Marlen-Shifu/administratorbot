@@ -386,3 +386,13 @@ def create_onetime_task_answer(task_id, user_id, answer,type, value):
     except Exception as e:
         print(e)
         raise e
+
+
+def get_onetime_task_user_answer(task_id, user_id):
+    try:
+        answer = s.query(OneTimeTaskAnswer).filter_by(task_id = task_id, user_id = user_id)
+
+        return answer
+    except Exception as e:
+        print(e)
+        raise e
