@@ -8,7 +8,7 @@ from db.operations import get_onetime_tasks, \
     get_task, \
     get_user, \
     get_onetime_task_users, \
-    delete_periodic_task, get_task_users, delete_onetime_task_oper
+    delete_periodic_task, get_task_users, delete_onetime_task_oper, get_onetime_task_answers
 
 from states import DeleteOneTimeTask
 
@@ -114,7 +114,7 @@ async def onetimetask_answers(callback: types.CallbackQuery):
 
     task = get_task(task_id)
 
-    task_answers = task.get_answers()
+    task_answers = get_onetime_task_answers(task_id)
 
     send_text = f"Ответы на задание \"{task.title}\""
 
@@ -126,7 +126,7 @@ async def onetimetask_answers(callback: types.CallbackQuery):
         return
 
     for answer in task_answers:
-        if answer['answer'] == 'yes':
+        if answer.answer == 'yes':
             answers_yes.append(answer)
         else:
             answers_no.append(answer)
@@ -137,7 +137,7 @@ async def onetimetask_answers(callback: types.CallbackQuery):
 
         counter = 1
         for answer in answers_yes:
-            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /task_comment_{task_id}_{answer['user_id']}"
+            send_text += f"\n        {counter}. {get_user(answer.user_id).username} /task_comment_{task_id}_{answer.user_id}"
             counter += 1
     else:
         send_text += "\n        Нету"
@@ -147,7 +147,7 @@ async def onetimetask_answers(callback: types.CallbackQuery):
     if len(answers_no) > 0:
         counter = 1
         for answer in answers_no:
-            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /task_comment_{task_id}_{answer['user_id']}"
+            send_text += f"\n        {counter}. {get_user(answer.user_id).username} /task_comment_{task_id}_{answer.user_id}"
             counter += 1
     else:
         send_text += "\n        Нету"
@@ -160,7 +160,7 @@ async def onetimetask_answers(callback: types.CallbackQuery):
 
     def user_is_answered(user, answers_list):
         for answer in answers_list:
-            if user.id == answer['user_id']:
+            if user.id == answer.user_id:
                 return True
 
         return False

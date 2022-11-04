@@ -73,7 +73,7 @@ def main_menu():
 def worker_menu():
     k = ReplyKeyboardMarkup(resize_keyboard=True)
 
-    k.row(KeyboardButton('Список работников'), KeyboardButton('Добавить работника'))
-    k.row(KeyboardButton('Мои одноразовые задачи'), KeyboardButton('Мои периодичные задачи'))
+    k.row(KeyboardButton('Список работников'), KeyboardButton('Мои периодичные задачи'))
+    k.row(KeyboardButton('Мои одноразовые задачи'), KeyboardButton('Добавить одноразовую задачу'))
 
     return k

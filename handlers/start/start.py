@@ -329,7 +329,7 @@ async def comment_task(mes: types.Message, state: FSMContext):
 
     answer = data.get('answer')
 
-    answers = task.get_answers()
+    answers = get_onetime_task_answers(task_id)
 
     user = get_worker_by_userid(mes.from_user.id)
 
@@ -338,12 +338,7 @@ async def comment_task(mes: types.Message, state: FSMContext):
     elif mes.content_type == 'photo':
         value = mes.photo[-1].file_id
 
-    if answers is None:
-        answers = [{"user_id": user.id, "answer": f"{answer}", "type": mes.content_type, "value": value}]
-    else:
-        answers.append({"user_id": user.id, "answer": f"{answer}", "type": mes.content_type, "value": value})
-
-    update_onetime_task_answers(task_id, answers)
+    create_onetime_task_answer(task_id, user.id, answer, mes.content_type, value)
 
     await mes.answer('Ответ записан. Спасибо)', reply_markup=main_menu())
 

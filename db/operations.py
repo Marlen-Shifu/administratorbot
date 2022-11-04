@@ -357,3 +357,32 @@ def delete_worker(worker_id):
     except Exception as e:
         print(e)
         raise e
+
+
+def get_onetime_task_answers(task_id):
+    try:
+        answers = s.query(OneTimeTaskAnswer).filter(task_id = task_id)
+
+        return answers
+    except Exception as e:
+        print(e)
+        raise e
+
+
+def create_onetime_task_answer(task_id, user_id, answer,type, value):
+    try:
+
+        ins = OneTimeTaskAnswer(
+            task_id = task_id,
+            user_id = user_id,
+            answer = answer,
+            answer_type = type,
+            answer_value = value
+        )
+
+        s.add(ins)
+        s.commit()
+
+    except Exception as e:
+        print(e)
+        raise e

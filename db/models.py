@@ -138,4 +138,32 @@ class PeriodicTaskUser(Base):
     worker_id = Column(Integer)
 
 
+class OneTimeTaskAnswer(Base):
+    __tablename__ = 'onetime_task_answer'
+
+    id = Column(Integer, primary_key=True)
+
+    task_id = Column(Integer)
+    user_id = Column(Integer)
+
+    answer = Column(String(5))
+
+    answer_type = Column(String(10))
+    answer_value = Column(String(255))
+
+
+class PeriodicTaskAnswer(Base):
+    __tablename__ = 'periodic_task_answer'
+
+    id = Column(Integer, primary_key=True)
+
+    task_id = Column(Integer)
+    user_id = Column(Integer)
+
+    answer_type = Column(String(10))
+    answer_value = Column(String(255))
+
+    time = Column(DateTime())
+
+
 Base.metadata.create_all(engine)
