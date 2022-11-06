@@ -1,5 +1,5 @@
 
-from celery_bot import ask_task
+from celery_bot import ask_task, tasks_report
 
 from datetime import datetime
 
@@ -259,6 +259,8 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
         c_task_id = ask_task.apply_async((task_id, mes.from_user.id), eta=run_time)
 
         update_celery_task_id(task_id, c_task_id)
+
+        tasks_report.apply_async(eta = run_time + datetime.timedelta(seconds=3))
 
         await state.finish()
 

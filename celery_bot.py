@@ -8,7 +8,8 @@ from celery.schedules import crontab
 
 from db.models import User, OneTimeTaskUser, PeriodicTask, PeriodicTaskUser, db_session as s
 
-from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks, update_task_answers
+from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks, \
+    update_task_answers, get_all_task_answers, get_onetime_tasks
 
 from utils.mailing.mail import mail
 
@@ -289,6 +290,28 @@ def ask_periodic_task(c_task, task_id, user_id):
         return c_task.request.id
     except Exception as e:
         print(e)
+
+
+
+@app.task(max_retries = 10, default_retry_delay=3)
+def tasks_report():
+    try:
+
+        today = datetime.datetime.today().date()
+
+        tasks = get_onetime_tasks()
+
+        today_tasks = []
+
+        for task in tasks:
+            if task.time.date == today:
+                today_tasks.append(task)
+
+        mail(840647074, f"{today_tasks}")
+
+    except Exception as e:
+        print(e)
+        raise e
 
 
 @app.task()
