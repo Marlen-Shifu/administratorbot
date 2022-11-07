@@ -20,7 +20,8 @@ from .start import user_start,\
     add_task_confirm,\
     cancel_btn, \
     answer_to_task, \
-    comment_task
+    comment_task,\
+    report
 
 
 
@@ -44,4 +45,4 @@ def setup(dp: Dispatcher):
 
     dp.register_message_handler(comment_task, state=TaskAnswer.comment, content_types=types.ContentType.all())
 
-    dp.register_message_handler(add_worker, lambda m: m.text == 'Отчет')
+    dp.register_message_handler(report, lambda m: m.text == 'Отчет')
