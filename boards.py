@@ -66,6 +66,7 @@ def main_menu():
     k.add(KeyboardButton('Список работников'), KeyboardButton('Добавить работника'))
     k.row(KeyboardButton('Список одноразовых задач'), KeyboardButton('Добавить одноразовую задачу'))
     k.row(KeyboardButton('Список периодичных задач'), KeyboardButton('Добавить периодичную задачу'))
+    k.row(KeyboardButton('Отчет'))
 
     return k
 

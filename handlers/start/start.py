@@ -275,6 +275,9 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
         await mes.answer("Выберите Да или Нет")
 
 
+async def report(mes: types.Message):
+    tasks_report.apply_async()
+
 
 async def answer_to_task(callback: types.CallbackQuery):
     data = callback.data.split(' ')
