@@ -312,7 +312,8 @@ def tasks_report():
         with open(f'{today}_report', 'w') as file:
             writer = csv.writer(file)
 
-            writer.writerows(today_tasks)
+            for task in today_tasks:
+                writer.writerow([task.id, task.title, task.description, task.time, task.creator_id])
 
 
         with open(f'{today}_report', 'r') as file:
