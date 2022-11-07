@@ -310,7 +310,7 @@ def tasks_report():
                 today_tasks.append(task)
 
         with open(f'{today}_report.csv', 'w') as file:
-            writer = csv.writer(file, delimiter = ' ')
+            writer = csv.writer(file, delimiter = ' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
             for task in today_tasks:
                 writer.writerow([task.id, task.title, task.description, task.time, task.creator_id])
