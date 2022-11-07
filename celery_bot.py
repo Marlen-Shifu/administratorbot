@@ -11,7 +11,9 @@ from db.models import User, OneTimeTaskUser, PeriodicTask, PeriodicTaskUser, db_
 from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks, \
     update_task_answers, get_all_task_answers, get_onetime_tasks
 
-from utils.mailing.mail import mail
+from utils.mailing.mail import mail, mail_document
+
+import csv
 
 app = Celery('tasks', broker='redis://:RedisPass@redis:6379/0', backend='redis://:RedisPass@redis:6379/1')
 
@@ -304,12 +306,18 @@ def tasks_report():
         today_tasks = []
 
         for task in tasks:
-            mail(840647074, f"{task.time.date()}")
-
             if task.time.date() == today:
                 today_tasks.append(task)
 
-        mail(840647074, f"{today_tasks}")
+        with open(f'{today}_report', 'w') as file:
+            writer = csv.writer(file)
+
+            writer.writerows(today_tasks)
+
+
+        with open(f'{today}_report', 'r') as file:
+            mail_document(840647074, file)
+
 
     except Exception as e:
         print(e)
