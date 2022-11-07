@@ -298,12 +298,17 @@ def tasks_report():
     try:
 
         today = datetime.datetime.today().date()
+        mail(840647074, f"{today}")
 
         tasks = get_onetime_tasks()
+        mail(840647074, f"{tasks}")
 
         today_tasks = []
 
         for task in tasks:
+            mail(840647074, f"{task.time.date}")
+            mail(840647074, f"{task.time}")
+
             if task.time.date == today:
                 today_tasks.append(task)
 
