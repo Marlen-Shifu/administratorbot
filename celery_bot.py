@@ -311,7 +311,7 @@ def tasks_report():
                 today_tasks.append(task)
         mail(840647074, "2")
 
-        with open(f'{today}_report', 'w') as file:
+        with open(f'{today}_report.csv', 'w') as file:
             writer = csv.writer(file)
 
             for task in today_tasks:
@@ -320,7 +320,7 @@ def tasks_report():
 
         mail(840647074, "3")
 
-        with open(f'{today}_report', 'r') as file:
+        with open(f'{today}_report.csv', 'r') as file:
             mail_document(840647074, file)
         mail(840647074, "4")
 
