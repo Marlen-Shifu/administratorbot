@@ -5,7 +5,7 @@ from sqlalchemy.pool import QueuePool
 
 import json
 
-DATABASE_CONNECTION_URI = f'postgresql+psycopg2://admin:admin_password@database:5432/db'
+DATABASE_CONNECTION_URI = f'postgresql+psycopg2://admin:admin_password@database:5432/db?gssencmode=disable'
 engine = create_engine(DATABASE_CONNECTION_URI, echo=False, pool_recycle=3600, pool_size=10)
 
 
