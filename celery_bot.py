@@ -312,7 +312,7 @@ def tasks_report():
         mail(840647074, "2")
 
         with open(f'{today}_report.csv', 'w') as file:
-            writer = csv.writer(file)
+            writer = csv.writer(file, delimiter = ' ')
 
             for task in today_tasks:
                 mail(840647074, f"{task.title}")
