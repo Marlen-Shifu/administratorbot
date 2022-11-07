@@ -13,8 +13,6 @@ from db.operations import get_task, get_task_users, get_user, get_periodic_task,
 
 from utils.mailing.mail import mail, mail_document
 
-import pandas as pd
-
 import csv
 
 app = Celery('tasks', broker='redis://:RedisPass@redis:6379/0', backend='redis://:RedisPass@redis:6379/1')
@@ -311,31 +309,16 @@ def tasks_report():
             if task.time.date() == today:
                 today_tasks.append(task)
 
-        # with open(f'{today}_report.csv', 'w') as file:
-        #     writer = csv.writer(file)
-        #
-        #     for task in today_tasks:
-        #         writer.writerow([task.id, task.title, task.description, task.time, task.creator_id])
-        #
-        #
-        # with open(f'{today}_report.csv', 'rb') as file:
-        #     mail_document(840647074, file)
+        with open(f'{today}_report.csv', 'w') as file:
+            writer = csv.writer(file)
 
-        title = []
-        des = []
-        time = []
+            for task in today_tasks:
+                writer.writerow([task.id, task.title, task.description, task.time, task.creator_id])
 
-        for task in today_tasks:
-            title.append(task.title)
-            des.append(task.description)
-            time.append(task.time)
 
-        df = pd.DataFrame({'Title': title, 'Description': des, 'Time': time})
-
-        df.to_excel(f'./{today}_report.xlsx')
-
-        with open(f'{today}_report.xlsx', 'rb') as file:
+        with open(f'{today}_report.csv', 'rb') as file:
             mail_document(840647074, file)
+
 
     except Exception as e:
         print(e)
