@@ -323,7 +323,7 @@ def tasks_report():
         for task in today_tasks:
             title.append(task.title)
             des.append(task.description)
-            time.append(task.time)
+            time.append(str(task.time))
 
         df = pd.DataFrame({'Title': title, 'Description': des, 'Time': time})
 
