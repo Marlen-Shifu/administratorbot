@@ -302,27 +302,22 @@ def tasks_report():
         today = datetime.datetime.today().date()
 
         tasks = get_onetime_tasks()
-        mail(840647074, "1")
 
         today_tasks = []
 
         for task in tasks:
             if task.time.date() == today:
                 today_tasks.append(task)
-        mail(840647074, "2")
 
         with open(f'{today}_report.csv', 'w') as file:
             writer = csv.writer(file, delimiter = ' ')
 
             for task in today_tasks:
-                mail(840647074, f"{task.title}")
                 writer.writerow([task.id, task.title, task.description, task.time, task.creator_id])
 
-        mail(840647074, "3")
 
         with open(f'{today}_report.csv', 'rb') as file:
             mail_document(840647074, file)
-        mail(840647074, "4")
 
 
     except Exception as e:
