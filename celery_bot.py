@@ -320,7 +320,7 @@ def tasks_report():
 
         mail(840647074, "3")
 
-        with open(f'{today}_report.csv', 'r') as file:
+        with open(f'{today}_report.csv', 'rb') as file:
             mail_document(840647074, file)
         mail(840647074, "4")
 
