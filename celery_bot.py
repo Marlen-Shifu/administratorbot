@@ -9,7 +9,7 @@ from celery.schedules import crontab
 from db.models import User, OneTimeTaskUser, PeriodicTask, PeriodicTaskUser, db_session as s
 
 from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks, \
-    update_task_answers, get_all_task_answers, get_onetime_tasks
+    update_task_answers, get_all_task_answers, get_onetime_tasks, get_onetime_task_answers
 
 from utils.mailing.mail import mail, mail_document
 
@@ -316,16 +316,59 @@ def tasks_report():
         #
         #     for task in today_tasks:
         #         writer.writerow([task.id, task.title, task.description, task.time, task.creator_id])
-        title = []
-        des = []
-        time = []
+        titles = []
+        dess = []
+        times = []
+        workers = []
+        answers_yes = []
+        answers_no = []
+        answers_not = []
+
+        def add_row(title=None, des = None, time = None, worker = None, answer_yes = None, answer_no = None, answer_not = None):
+            titles.append(title)
+            dess.append(des)
+            times.append(time)
+            workers.append(worker)
+            answers_yes.append(answer_yes)
+            answers_no.append(answer_no)
+            answers_not.append(answer_not)
+
 
         for task in today_tasks:
-            title.append(task.title)
-            des.append(task.description)
-            time.append(str(task.time))
 
-        df = pd.DataFrame({'Title': title, 'Description': des, 'Time': time})
+            task_answers = get_onetime_task_answers(task.id)
+
+            add_row(task.title, task.description, str(task.time))
+
+            for task_answer in task_answers:
+                worker = get_user(task_answer.user_id)
+
+                if task_answer.answer == 'yes':
+                    add_row(worker=worker.username, answer_yes='+')
+                elif task_answer.answer == 'no':
+                    add_row(worker=worker.username, answer_no='-')
+
+
+            task_users = get_task_users(task.id)
+
+            task_users = [get_user(task_user.worker_id) for task_user in task_users]
+
+
+            def user_is_answered(user, answers_list):
+                for answer in answers_list:
+                    if user.id == answer.user_id:
+                        return True
+
+                return False
+
+            for task_user in task_users:
+                if user_is_answered(task_user, task_answers):
+                    continue
+                else:
+                    add_row(worker=task_user.username, answer_not='?')
+
+
+        df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes, 'Нет': answers_no, 'Нет ответа': answers_not})
 
         df.to_excel(f'./{today}_report.xlsx')
 
