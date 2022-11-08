@@ -328,6 +328,7 @@ def tasks_report(user_id):
 
         periodic_tasks_report_write(writer, today_p_tasks)
 
+        writer.save()
         with open(f'{today}_report.xlsx', 'rb') as file:
             mail_document(user_id, file)
 
@@ -340,7 +341,6 @@ def tasks_report(user_id):
         # with open(f'{today}_report.csv', 'rb') as file:
         #     mail_document(840647074, file)
 
-        writer.save()
 
 
     except Exception as e:
