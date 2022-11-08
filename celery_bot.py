@@ -321,6 +321,9 @@ def tasks_report(user_id):
         today_p_tasks = []
 
         for task in p_tasks:
+            print(task)
+            print(today.weekday())
+            print(task.get_days_list())
             if today.weekday() in task.get_days_list():
                 today_p_tasks.append(task)
 
