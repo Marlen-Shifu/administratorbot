@@ -370,7 +370,7 @@ def tasks_report():
 
         df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes, 'Нет': answers_no, 'Нет ответа': answers_not})
 
-        df.to_excel(f'./{today}_report.xlsx')
+        df.to_excel(f'./{today}_report.xlsx', index=False)
 
         with open(f'{today}_report.xlsx', 'rb') as file:
             mail_document(840647074, file)
