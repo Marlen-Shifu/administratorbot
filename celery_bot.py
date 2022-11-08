@@ -303,78 +303,37 @@ def tasks_report(user_id):
 
         today = datetime.datetime.today().date()
 
-        tasks = get_onetime_tasks()
+        # writer = pd.ExcelWriter(f'./{today}_report.xlsx', engine = 'xlsxwriter')
+        #
+        # tasks = get_onetime_tasks()
+        #
+        # today_tasks = []
+        #
+        # for task in tasks:
+        #     if task.time.date() == today:
+        #         today_tasks.append(task)
+        #
+        # onetime_tasks_report_write(writer, today_tasks)
 
-        today_tasks = []
 
-        for task in tasks:
-            if task.time.date() == today:
-                today_tasks.append(task)
+        p_tasks = get_periodic_tasks()
+
+        today_p_tasks = []
+
+        for task in p_tasks:
+            if today.weekday() in task.get_days_list():
+                today_p_tasks.append(task)
+
+        mail(user_id, f'{today_p_tasks}')
+        # with open(f'{today}_report.xlsx', 'rb') as file:
+        #     mail_document(user_id, file)
+
 
         # with open(f'{today}_report.csv', 'w') as file:
         #     writer = csv.writer(file)
         #
         #     for task in today_tasks:
         #         writer.writerow([task.id, task.title, task.description, task.time, task.creator_id])
-        titles = []
-        dess = []
-        times = []
-        workers = []
-        answers_yes = []
-        answers_no = []
-        answers_not = []
-
-        def add_row(title=None, des = None, time = None, worker = None, answer_yes = None, answer_no = None, answer_not = None):
-            titles.append(title)
-            dess.append(des)
-            times.append(time)
-            workers.append(worker)
-            answers_yes.append(answer_yes)
-            answers_no.append(answer_no)
-            answers_not.append(answer_not)
-
-
-        for task in today_tasks:
-
-            task_answers = get_onetime_task_answers(task.id)
-
-            add_row(task.title, task.description, str(task.time))
-
-            for task_answer in task_answers:
-                worker = get_user(task_answer.user_id)
-
-                if task_answer.answer == 'yes':
-                    add_row(worker=worker.username, answer_yes='+')
-                elif task_answer.answer == 'no':
-                    add_row(worker=worker.username, answer_no='-')
-
-
-            task_users = get_task_users(task.id)
-
-            task_users = [get_user(task_user.worker_id) for task_user in task_users]
-
-
-            def user_is_answered(user, answers_list):
-                for answer in answers_list:
-                    if user.id == answer.user_id:
-                        return True
-
-                return False
-
-            for task_user in task_users:
-                if user_is_answered(task_user, task_answers):
-                    continue
-                else:
-                    add_row(worker=task_user.username, answer_not='?')
-
-
-        df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes, 'Нет': answers_no, 'Нет ответа': answers_not})
-
-        df.to_excel(f'./{today}_report.xlsx', index=False)
-
-        with open(f'{today}_report.xlsx', 'rb') as file:
-            mail_document(user_id, file)
-
         # with open(f'{today}_report.csv', 'rb') as file:
         #     mail_document(840647074, file)
 
@@ -384,6 +343,113 @@ def tasks_report(user_id):
         raise e
 
 
-@app.task()
-def test(text):
-    print(text)
+
+def onetime_tasks_report_write(writer, tasks_list):
+    titles = []
+    dess = []
+    times = []
+    workers = []
+    answers_yes = []
+    answers_no = []
+    answers_not = []
+
+    def add_row(title=None, des=None, time=None, worker=None, answer_yes=None, answer_no=None, answer_not=None):
+        titles.append(title)
+        dess.append(des)
+        times.append(time)
+        workers.append(worker)
+        answers_yes.append(answer_yes)
+        answers_no.append(answer_no)
+        answers_not.append(answer_not)
+
+    for task in tasks_list:
+
+        task_answers = get_onetime_task_answers(task.id)
+
+        add_row(task.title, task.description, str(task.time))
+
+        for task_answer in task_answers:
+            worker = get_user(task_answer.user_id)
+
+            if task_answer.answer == 'yes':
+                add_row(worker=worker.username, answer_yes='+')
+            elif task_answer.answer == 'no':
+                add_row(worker=worker.username, answer_no='-')
+
+        task_users = get_task_users(task.id)
+
+        task_users = [get_user(task_user.worker_id) for task_user in task_users]
+
+        def user_is_answered(user, answers_list):
+            for answer in answers_list:
+                if user.id == answer.user_id:
+                    return True
+
+            return False
+
+        for task_user in task_users:
+            if user_is_answered(task_user, task_answers):
+                continue
+            else:
+                add_row(worker=task_user.username, answer_not='?')
+
+    df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes,
+                       'Нет': answers_no, 'Нет ответа': answers_not})
+
+    df.to_excel(writer, sheet_name='Одноразовые задачи', index=False)
+
+
+
+def periodic_tasks_report_write(writer, tasks_list):
+    titles = []
+    dess = []
+    times = []
+    workers = []
+    answers_yes = []
+    answers_no = []
+    answers_not = []
+
+    def add_row(title=None, des=None, time=None, worker=None, answer_yes=None, answer_no=None, answer_not=None):
+        titles.append(title)
+        dess.append(des)
+        times.append(time)
+        workers.append(worker)
+        answers_yes.append(answer_yes)
+        answers_no.append(answer_no)
+        answers_not.append(answer_not)
+
+    for task in tasks_list:
+
+        task_answers = get_onetime_task_answers(task.id)
+
+        add_row(task.title, task.description, str(task.time))
+
+        for task_answer in task_answers:
+            worker = get_user(task_answer.user_id)
+
+            if task_answer.answer == 'yes':
+                add_row(worker=worker.username, answer_yes='+')
+            elif task_answer.answer == 'no':
+                add_row(worker=worker.username, answer_no='-')
+
+        task_users = get_task_users(task.id)
+
+        task_users = [get_user(task_user.worker_id) for task_user in task_users]
+
+        def user_is_answered(user, answers_list):
+            for answer in answers_list:
+                if user.id == answer.user_id:
+                    return True
+
+            return False
+
+        for task_user in task_users:
+            if user_is_answered(task_user, task_answers):
+                continue
+            else:
+                add_row(worker=task_user.username, answer_not='?')
+
+    df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes,
+                       'Нет': answers_no, 'Нет ответа': answers_not})
+
+    df.to_excel(writer, sheet_name='Одноразовые задачи', index=False)
