@@ -429,31 +429,31 @@ def periodic_tasks_report_write(writer, tasks_list):
 
         add_row(task.title, task.description, task.get_times_list())
 
-        for task_answer in task_answers:
-            worker = get_user(task_answer.user_id)
-            print(worker)
-
-            if task_answer.answer == 'yes':
-                add_row(worker=worker.username, answer_yes='+')
-            elif task_answer.answer == 'no':
-                add_row(worker=worker.username, answer_no='-')
-
-        task_users = get_periodic_task_users(task.id)
-
-        task_users = [get_user(task_user.worker_id) for task_user in task_users]
-
-        def user_is_answered(user, answers_list):
-            for answer in answers_list:
-                if user.id == answer.user_id:
-                    return True
-
-            return False
-
-        for task_user in task_users:
-            if user_is_answered(task_user, task_answers):
-                continue
-            else:
-                add_row(worker=task_user.username, answer_not='?')
+        # for task_answer in task_answers:
+        #     worker = get_user(task_answer.user_id)
+        #     print(worker)
+        #
+        #     if task_answer.answer == 'yes':
+        #         add_row(worker=worker.username, answer_yes='+')
+        #     elif task_answer.answer == 'no':
+        #         add_row(worker=worker.username, answer_no='-')
+        #
+        # task_users = get_periodic_task_users(task.id)
+        #
+        # task_users = [get_user(task_user.worker_id) for task_user in task_users]
+        #
+        # def user_is_answered(user, answers_list):
+        #     for answer in answers_list:
+        #         if user.id == answer.user_id:
+        #             return True
+        #
+        #     return False
+        #
+        # for task_user in task_users:
+        #     if user_is_answered(task_user, task_answers):
+        #         continue
+        #     else:
+        #         add_row(worker=task_user.username, answer_not='?')
 
     df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes,
                        'Нет': answers_no, 'Нет ответа': answers_not})
