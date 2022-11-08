@@ -303,17 +303,17 @@ def tasks_report(user_id):
 
         today = datetime.datetime.today().date()
 
-        writer = pd.ExcelWriter(f'./{today}_report.xlsx', engine = 'xlsxwriter')
+        writer = pd.ExcelWriter(f'{today}_report.xlsx', engine = 'xlsxwriter')
         #
-        # tasks = get_onetime_tasks()
-        #
-        # today_tasks = []
-        #
-        # for task in tasks:
-        #     if task.time.date() == today:
-        #         today_tasks.append(task)
-        #
-        # onetime_tasks_report_write(writer, today_tasks)
+        tasks = get_onetime_tasks()
+
+        today_tasks = []
+
+        for task in tasks:
+            if task.time.date() == today:
+                today_tasks.append(task)
+
+        onetime_tasks_report_write(writer, today_tasks)
 
 
         p_tasks = get_periodic_tasks()
@@ -328,7 +328,7 @@ def tasks_report(user_id):
 
         periodic_tasks_report_write(writer, today_p_tasks)
 
-        with open(f'./{today}_report.xlsx', 'rb') as file:
+        with open(f'{today}_report.xlsx', 'rb') as file:
             mail_document(user_id, file)
 
 
