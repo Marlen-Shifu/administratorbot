@@ -9,7 +9,7 @@ from celery.schedules import crontab
 from db.models import User, OneTimeTaskUser, PeriodicTask, PeriodicTaskUser, db_session as s
 
 from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks, \
-    update_task_answers, get_all_task_answers, get_onetime_tasks, get_onetime_task_answers
+    update_task_answers, get_all_task_answers, get_onetime_tasks, get_onetime_task_answers, get_periodic_task_answers, get_periodic_task_users
 
 from utils.mailing.mail import mail, mail_document
 
@@ -303,7 +303,7 @@ def tasks_report(user_id):
 
         today = datetime.datetime.today().date()
 
-        # writer = pd.ExcelWriter(f'./{today}_report.xlsx', engine = 'xlsxwriter')
+        writer = pd.ExcelWriter(f'./{today}_report.xlsx', engine = 'xlsxwriter')
         #
         # tasks = get_onetime_tasks()
         #
@@ -325,6 +325,9 @@ def tasks_report(user_id):
                 today_p_tasks.append(task)
 
         mail(user_id, f'{today_p_tasks}')
+
+        periodic_tasks_report_write(writer, today_p_tasks)
+        
         # with open(f'{today}_report.xlsx', 'rb') as file:
         #     mail_document(user_id, file)
 
@@ -420,9 +423,9 @@ def periodic_tasks_report_write(writer, tasks_list):
 
     for task in tasks_list:
 
-        task_answers = get_onetime_task_answers(task.id)
+        task_answers = get_periodic_task_answers(task.id)
 
-        add_row(task.title, task.description, str(task.time))
+        add_row(task.title, task.description, task.get_times_list())
 
         for task_answer in task_answers:
             worker = get_user(task_answer.user_id)
@@ -432,7 +435,7 @@ def periodic_tasks_report_write(writer, tasks_list):
             elif task_answer.answer == 'no':
                 add_row(worker=worker.username, answer_no='-')
 
-        task_users = get_task_users(task.id)
+        task_users = get_periodic_task_users(task.id)
 
         task_users = [get_user(task_user.worker_id) for task_user in task_users]
 
@@ -452,4 +455,4 @@ def periodic_tasks_report_write(writer, tasks_list):
     df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes,
                        'Нет': answers_no, 'Нет ответа': answers_not})
 
-    df.to_excel(writer, sheet_name='Одноразовые задачи', index=False)
+    df.to_excel(writer, sheet_name='Периодичные задачи', index=False)
