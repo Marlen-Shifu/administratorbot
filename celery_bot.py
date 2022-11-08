@@ -328,7 +328,7 @@ def tasks_report(user_id):
 
         periodic_tasks_report_write(writer, today_p_tasks)
 
-        with open(f'{today}_report.xlsx', 'rb') as file:
+        with open(f'./{today}_report.xlsx', 'rb') as file:
             mail_document(user_id, file)
 
 
@@ -424,11 +424,14 @@ def periodic_tasks_report_write(writer, tasks_list):
     for task in tasks_list:
 
         task_answers = get_periodic_task_answers(task.id)
+        print(task)
+        print(task_answers)
 
         add_row(task.title, task.description, task.get_times_list())
 
         for task_answer in task_answers:
             worker = get_user(task_answer.user_id)
+            print(worker)
 
             if task_answer.answer == 'yes':
                 add_row(worker=worker.username, answer_yes='+')
