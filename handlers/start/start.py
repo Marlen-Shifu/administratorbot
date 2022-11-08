@@ -260,7 +260,7 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
 
         update_celery_task_id(task_id, c_task_id)
 
-        tasks_report.apply_async(eta = run_time + datetime.timedelta(seconds=3))
+        # tasks_report.apply_async(eta = run_time + datetime.timedelta(seconds=3))
 
         await state.finish()
 
@@ -276,7 +276,7 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
 
 
 async def report(mes: types.Message):
-    tasks_report.apply_async()
+    tasks_report.apply_async((mes.from_user.id, ))
 
 
 async def answer_to_task(callback: types.CallbackQuery):

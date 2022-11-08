@@ -298,7 +298,7 @@ def ask_periodic_task(c_task, task_id, user_id):
 
 
 @app.task(max_retries = 10, default_retry_delay=3)
-def tasks_report():
+def tasks_report(user_id):
     try:
 
         today = datetime.datetime.today().date()
@@ -373,7 +373,7 @@ def tasks_report():
         df.to_excel(f'./{today}_report.xlsx', index=False)
 
         with open(f'{today}_report.xlsx', 'rb') as file:
-            mail_document(840647074, file)
+            mail_document(user_id, file)
 
         # with open(f'{today}_report.csv', 'rb') as file:
         #     mail_document(840647074, file)
