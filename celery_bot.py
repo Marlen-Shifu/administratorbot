@@ -9,7 +9,8 @@ from celery.schedules import crontab
 from db.models import User, OneTimeTaskUser, PeriodicTask, PeriodicTaskUser, db_session as s
 
 from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks, \
-    update_task_answers, get_all_task_answers, get_onetime_tasks, get_onetime_task_answers, get_periodic_task_answers, get_periodic_task_users
+    update_task_answers, get_all_task_answers, get_onetime_tasks, get_onetime_task_answers, get_periodic_task_answers, \
+    get_periodic_task_users
 
 from utils.mailing.mail import mail, mail_document
 
@@ -183,14 +184,14 @@ def ask_task(c_task, task_id, user_id):
 
         s.remove()
 
-        onetime_task_answers.apply_async([task_id], eta = datetime.datetime.now() + datetime.timedelta(minutes=30))
+        onetime_task_answers.apply_async([task_id], eta=datetime.datetime.now() + datetime.timedelta(minutes=30))
 
         return c_task.request.id
     except Exception as e:
         print(e)
 
 
-@app.task(max_retries = 10, default_retry_delay=3)
+@app.task(max_retries=10, default_retry_delay=3)
 def onetime_task_answers(task_id):
     try:
 
@@ -296,15 +297,14 @@ def ask_periodic_task(c_task, task_id, user_id):
         print(e)
 
 
-
-@app.task(max_retries = 10, default_retry_delay=3)
+@app.task(max_retries=10, default_retry_delay=3)
 def tasks_report(user_id):
     try:
 
         today = datetime.datetime.today().date()
 
-        writer = pd.ExcelWriter(f'{today}_report.xlsx', engine = 'xlsxwriter')
-        #
+        writer = pd.ExcelWriter(f'{today}_report.xlsx', engine='xlsxwriter')
+
         tasks = get_onetime_tasks()
 
         today_tasks = []
@@ -314,7 +314,6 @@ def tasks_report(user_id):
                 today_tasks.append(task)
 
         onetime_tasks_report_write(writer, today_tasks)
-
 
         p_tasks = get_periodic_tasks()
 
@@ -332,7 +331,6 @@ def tasks_report(user_id):
         with open(f'{today}_report.xlsx', 'rb') as file:
             mail_document(user_id, file)
 
-
         # with open(f'{today}_report.csv', 'w') as file:
         #     writer = csv.writer(file)
         #
@@ -346,7 +344,6 @@ def tasks_report(user_id):
     except Exception as e:
         print(e)
         raise e
-
 
 
 def onetime_tasks_report_write(writer, tasks_list):
@@ -404,7 +401,6 @@ def onetime_tasks_report_write(writer, tasks_list):
     df.to_excel(writer, sheet_name='Одноразовые задачи', index=False)
 
 
-
 def periodic_tasks_report_write(writer, tasks_list):
     titles = []
     dess = []
@@ -424,22 +420,24 @@ def periodic_tasks_report_write(writer, tasks_list):
         answers_not.append(answer_not)
 
     for task in tasks_list:
-
         task_answers = get_periodic_task_answers(task.id)
-        print(task)
-        print(task_answers)
 
-        add_row(task.title, task.description, task.get_times_list())
+        for time in task.get_times_list():
+            add_row(task.title, task.description, time)
 
-        # for task_answer in task_answers:
-        #     worker = get_user(task_answer.user_id)
-        #     print(worker)
-        #
-        #     if task_answer.answer == 'yes':
-        #         add_row(worker=worker.username, answer_yes='+')
-        #     elif task_answer.answer == 'no':
-        #         add_row(worker=worker.username, answer_no='-')
-        #
+            for task_answer in task_answers:
+
+                if int(time) == task_answer.time.hour:
+
+                    worker = get_user(task_answer.user_id)
+
+                    if task_answer.answer == 'yes':
+                        add_row(worker=worker.username, answer_yes='+')
+                    elif task_answer.answer == 'no':
+                        add_row(worker=worker.username, answer_no='-')
+
+
+
         # task_users = get_periodic_task_users(task.id)
         #
         # task_users = [get_user(task_user.worker_id) for task_user in task_users]
