@@ -296,7 +296,7 @@ async def answer_to_task(callback: types.CallbackQuery):
     task_id = data[2]
     task = get_periodic_task(task_id)
 
-    answers = get_periodic_task_answers()
+    answers = get_periodic_task_answers(task_id)
 
     user = get_worker_by_userid(callback.from_user.id)
 

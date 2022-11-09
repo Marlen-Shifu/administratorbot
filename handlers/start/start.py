@@ -299,7 +299,7 @@ async def answer_to_task(callback: types.CallbackQuery):
 
         return False
 
-    if user_is_answered(user.id, answers):
+    if user_is_answered(user, answers):
         await callback.bot.send_message(callback.from_user.id, f'Вы уже ответили на данное задание')
 
     else:
