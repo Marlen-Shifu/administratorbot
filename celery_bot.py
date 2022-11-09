@@ -89,7 +89,7 @@ def periodic_task_answers(task_id):
 
         creator = get_user(task.creator_id)
 
-        task_answers = task.get_answers()
+        task_answers = get_periodic_task_answers(task_id)
 
         send_text = f"Ответы на задание \"{task.title}\""
 
@@ -101,7 +101,7 @@ def periodic_task_answers(task_id):
             return
 
         for answer in task_answers:
-            if answer['answer'] == 'yes':
+            if answer.answer == 'yes':
                 answers_yes.append(answer)
             else:
                 answers_no.append(answer)
@@ -112,7 +112,7 @@ def periodic_task_answers(task_id):
 
             counter = 1
             for answer in answers_yes:
-                send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /ptask_comment_{task_id}_{answer['user_id']}"
+                send_text += f"\n        {counter}. {get_user(answer.user_id).username} /ptask_comment_{task_id}_{answer.user_id}"
                 counter += 1
         else:
             send_text += "\n        Нету"
@@ -122,12 +122,12 @@ def periodic_task_answers(task_id):
         if len(answers_no) > 0:
             counter = 1
             for answer in answers_no:
-                send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /ptask_comment_{task_id}_{answer['user_id']}"
+                send_text += f"\n        {counter}. {get_user(answer.user_id).username} /ptask_comment_{task_id}_{answer.user_id}"
                 counter += 1
         else:
             send_text += "\n        Нету"
 
-        task_users = get_task_users(task_id)
+        task_users = get_periodic_task_users(task_id)
 
         task_users = [get_user(task_user.worker_id) for task_user in task_users]
 
@@ -135,7 +135,7 @@ def periodic_task_answers(task_id):
 
         def user_is_answered(user, answers_list):
             for answer in answers_list:
-                if user.id == answer['user_id']:
+                if user.id == answer.user_id:
                     return True
 
             return False
@@ -438,22 +438,22 @@ def periodic_tasks_report_write(writer, tasks_list):
 
 
 
-        # task_users = get_periodic_task_users(task.id)
-        #
-        # task_users = [get_user(task_user.worker_id) for task_user in task_users]
-        #
-        # def user_is_answered(user, answers_list):
-        #     for answer in answers_list:
-        #         if user.id == answer.user_id:
-        #             return True
-        #
-        #     return False
-        #
-        # for task_user in task_users:
-        #     if user_is_answered(task_user, task_answers):
-        #         continue
-        #     else:
-        #         add_row(worker=task_user.username, answer_not='?')
+        task_users = get_periodic_task_users(task.id)
+
+        task_users = [get_user(task_user.worker_id) for task_user in task_users]
+
+        def user_is_answered(user, answers_list):
+            for answer in answers_list:
+                if user.id == answer.user_id:
+                    return True
+
+            return False
+
+        for task_user in task_users:
+            if user_is_answered(task_user, task_answers):
+                continue
+            else:
+                add_row(worker=task_user.username, answer_not='?')
 
     df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes,
                        'Нет': answers_no, 'Нет ответа': answers_not})
