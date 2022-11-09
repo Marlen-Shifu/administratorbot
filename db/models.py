@@ -160,6 +160,8 @@ class PeriodicTaskAnswer(Base):
     task_id = Column(Integer)
     user_id = Column(Integer)
 
+    answer = Column(String(5))
+
     answer_type = Column(String(10))
     answer_value = Column(String(255))
 
