@@ -75,7 +75,7 @@ def mail_service():
                     mail(user.user_id, f"Вы выполнили это задание?\nНазвание: {task.title}", reply_markup=k)
 
                 periodic_task_answers.apply_async([task.id],
-                                                  eta=datetime.datetime.now() + datetime.timedelta(minutes=30))
+                                                  eta=datetime.datetime.now() + datetime.timedelta(seconds=5))
 
     except Exception as e:
         print(e)
