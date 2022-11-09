@@ -7,7 +7,7 @@ from db.operations import get_periodic_tasks, \
     get_periodic_task, \
     get_user, \
     get_periodic_task_users, \
-    delete_periodic_task, get_task_users
+    delete_periodic_task, get_task_users, get_periodic_task_answers, get_periodic_task_user_answer
 
 from states import DeleteTask
 
@@ -123,7 +123,7 @@ async def task_answers(callback: types.CallbackQuery):
 
     task = get_periodic_task(task_id)
 
-    task_answers = task.get_answers()
+    task_answers = get_periodic_task_answers(task_id)
 
     send_text = f"Ответы на задание \"{task.title}\""
 
@@ -135,7 +135,7 @@ async def task_answers(callback: types.CallbackQuery):
         return
 
     for answer in task_answers:
-        if answer['answer'] == 'yes':
+        if answer.answer == 'yes':
             answers_yes.append(answer)
         else:
             answers_no.append(answer)
@@ -146,7 +146,7 @@ async def task_answers(callback: types.CallbackQuery):
 
         counter = 1
         for answer in answers_yes:
-            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /ptask_comment_{task_id}_{answer['user_id']}"
+            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /ptask_comment_{task_id}_{answer.user_id}"
             counter += 1
     else:
         send_text += "\n        Нету"
@@ -156,12 +156,12 @@ async def task_answers(callback: types.CallbackQuery):
     if len(answers_no) > 0:
         counter = 1
         for answer in answers_no:
-            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /ptask_comment_{task_id}_{answer['user_id']}"
+            send_text += f"\n        {counter}. {get_user(answer['user_id']).username} /ptask_comment_{task_id}_{answer.user_id}"
             counter += 1
     else:
         send_text += "\n        Нету"
 
-    task_users = get_task_users(task_id)
+    task_users = get_periodic_task_users(task_id)
 
     task_users = [get_user(task_user.worker_id) for task_user in task_users]
 
@@ -169,8 +169,7 @@ async def task_answers(callback: types.CallbackQuery):
 
     def user_is_answered(user, answers_list):
         for answer in answers_list:
-
-            if user.id == answer['user_id']:
+            if user.id == answer.user_id:
                 return True
 
         return False
@@ -203,21 +202,21 @@ async def periodic_task_comment(mes: types.Message):
     task = get_periodic_task(task_id)
     user = get_user(user_id)
 
-    user_comment = task.get_user_comment(int(user_id))
+    user_comment = get_periodic_task_user_answer(task_id, user_id)
 
     if user_comment:
 
-        if user_comment['type'] == 'text':
+        if user_comment.answer_type == 'text':
             send_text = f'Пользователь {user.username} оставил текстовое сообщение'
             await mes.answer(send_text)
 
-            await mes.answer(user_comment['value'])
+            await mes.answer(user_comment.answer_value)
 
-        elif user_comment['type'] == 'photo':
+        elif user_comment.answer_type == 'photo':
             send_text = f'Пользователь {user.username} оставил фотографию'
             await mes.answer(send_text)
 
-            await mes.answer_photo(user_comment['value'])
+            await mes.answer_photo(user_comment.answer_value)
 
     else:
         await mes.answer('Ошибочка(... нету комментария')

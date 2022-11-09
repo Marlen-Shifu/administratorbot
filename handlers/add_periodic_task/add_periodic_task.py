@@ -8,7 +8,7 @@ from aiogram.utils.callback_data import CallbackData
 
 from boards import workers_board, day_time_board, day_time, main_menu
 from db.operations import get_user, get_user_by_userid, create_periodic_task, get_all_workers, get_periodic_task, \
-    update_task_answers, get_worker_by_userid
+    update_task_answers, get_worker_by_userid, get_periodic_task_answers, create_periodic_task_answer
 from states import AddPeriodicTask, PeriodicTaskAnswer
 from utils.mailing.mail import mail
 
@@ -296,11 +296,18 @@ async def answer_to_task(callback: types.CallbackQuery):
     task_id = data[2]
     task = get_periodic_task(task_id)
 
-    answers = task.get_answers()
+    answers = get_periodic_task_answers()
 
     user = get_worker_by_userid(callback.from_user.id)
 
-    if task.is_user_answered(user.id):
+    def user_is_answered(user, answers_list):
+        for answer in answers_list:
+            if user.id == answer.user_id:
+                return True
+
+        return False
+
+    if user_is_answered(user, answers):
         await callback.bot.send_message(callback.from_user.id, f'Вы уже ответили на данное задание')
 
     else:
@@ -338,7 +345,7 @@ async def comment_task(mes: types.Message, state: FSMContext):
 
     answer = data.get('answer')
 
-    answers = task.get_answers()
+    answers = get_periodic_task_answers(task_id)
 
     user = get_worker_by_userid(mes.from_user.id)
 
@@ -347,12 +354,7 @@ async def comment_task(mes: types.Message, state: FSMContext):
     elif mes.content_type == 'photo':
         value = mes.photo[-1].file_id
 
-    if answers is None:
-        answers = [{"user_id": user.id, "answer": f"{answer}", "type": mes.content_type, "value": value}]
-    else:
-        answers.append({"user_id": user.id, "answer": f"{answer}", "type": mes.content_type, "value": value})
-
-    update_task_answers(task_id, answers)
+    create_periodic_task_answer(task_id, user.id, answer, mes.content_type, value)
 
     await mes.answer('Ответ записан. Спасибо)', reply_markup=main_menu())
 

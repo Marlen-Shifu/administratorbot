@@ -396,9 +396,39 @@ def create_onetime_task_answer(task_id, user_id, answer,type, value):
         raise e
 
 
+def create_periodic_task_answer(task_id, user_id, answer,type, value):
+    try:
+
+        ins = PeriodicTaskAnswer(
+            task_id = task_id,
+            user_id = user_id,
+            answer = answer,
+            answer_type = type,
+            answer_value = value
+        )
+
+        s.add(ins)
+        s.commit()
+
+    except Exception as e:
+        print(e)
+        raise e
+
+
+
 def get_onetime_task_user_answer(task_id, user_id):
     try:
         answer = s.query(OneTimeTaskAnswer).filter_by(task_id = task_id, user_id = user_id).first()
+
+        return answer
+    except Exception as e:
+        print(e)
+        raise e
+
+
+def get_periodic_task_user_answer(task_id, user_id):
+    try:
+        answer = s.query(PeriodicTaskAnswer).filter_by(task_id = task_id, user_id = user_id).first()
 
         return answer
     except Exception as e:

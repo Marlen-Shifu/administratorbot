@@ -288,11 +288,18 @@ async def answer_to_task(callback: types.CallbackQuery):
     task_id = data[2]
     task = get_task(task_id)
 
-    answers = task.get_answers()
+    answers = get_onetime_task_answers(task_id)
 
     user = get_worker_by_userid(callback.from_user.id)
 
-    if task.is_user_answered(user.id):
+    def user_is_answered(user, answers_list):
+        for answer in answers_list:
+            if user.id == answer.user_id:
+                return True
+
+        return False
+
+    if user_is_answered(user.id, answers):
         await callback.bot.send_message(callback.from_user.id, f'Вы уже ответили на данное задание')
 
     else:
