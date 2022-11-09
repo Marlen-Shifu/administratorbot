@@ -421,12 +421,13 @@ def periodic_tasks_report_write(writer, tasks_list):
 
     for task in tasks_list:
         task_answers = get_periodic_task_answers(task.id)
-
+        mail(840647074, f"{task_answers}")
         for time in task.get_times_list():
             add_row(task.title, task.description, time)
 
             for task_answer in task_answers:
-
+                mail(840647074, f"{time}")
+                mail(840647074, f"{task_answer.time.hour}")
                 if int(time) == task_answer.time.hour:
 
                     worker = get_user(task_answer.user_id)
