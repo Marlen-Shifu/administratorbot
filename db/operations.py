@@ -408,7 +408,7 @@ def create_periodic_task_answer(task_id, user_id, answer,type, value):
             answer = answer,
             answer_type = type,
             answer_value = value,
-            time = datetime.datetime.now(tz=timez)
+            time = datetime.datetime.now() + offset
         )
 
         s.add(ins)
