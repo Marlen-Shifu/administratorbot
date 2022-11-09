@@ -421,7 +421,6 @@ def periodic_tasks_report_write(writer, tasks_list):
 
     for task in tasks_list:
         task_answers = get_periodic_task_answers(task.id)
-        mail(840647074, f"{task_answers}")
         for time in task.get_times_list():
             add_row(task.title, task.description, time)
 
