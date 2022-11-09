@@ -425,11 +425,7 @@ def periodic_tasks_report_write(writer, tasks_list):
         for time in task.get_times_list():
             add_row(task.title, task.description, time)
 
-            mail(840647074, f"{time}")
-            mail(840647074, f"{type(time)}")
             for task_answer in task_answers:
-                mail(840647074, f"{task_answer.time.hour}")
-                mail(840647074, f"{type(task_answer.time.hour)}")
 
                 if int(time) == task_answer.time.hour:
 

@@ -399,12 +399,16 @@ def create_onetime_task_answer(task_id, user_id, answer,type, value):
 def create_periodic_task_answer(task_id, user_id, answer,type, value):
     try:
 
+        offset = datetime.timedelta(hours=6)
+        timez = datetime.timezone(offset)
+
         ins = PeriodicTaskAnswer(
             task_id = task_id,
             user_id = user_id,
             answer = answer,
             answer_type = type,
-            answer_value = value
+            answer_value = value,
+            time = datetime.datetime.now(tz=timez)
         )
 
         s.add(ins)
