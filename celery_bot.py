@@ -24,10 +24,11 @@ app = Celery('tasks', broker='redis://:RedisPass@redis:6379/0', backend='redis:/
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     # Calls test('hello') every 10 seconds.
-    # sender.add_periodic_task(crontab(minute=0, hour='*/1'), mail_service.s())
+    sender.add_periodic_task(crontab(minute=0, hour='*/1'), mail_service.s())
+    sender.add_periodic_task(crontab(minute=0, hour=0), periodic_task_days_counter.s())
+    # sender.add_periodic_task(20.0, periodic_task_days_counter.s())
     # sender.add_periodic_task(5.0, mail_service.s())
-    sender.add_periodic_task(10.0, mail_service.s())
-    sender.add_periodic_task(20.0, periodic_task_days_counter.s())
+    # sender.add_periodic_task(10.0, mail_service.s())
 
 
 # app.conf.beat_schedule = {
