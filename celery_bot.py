@@ -92,21 +92,43 @@ def mail_service():
             hour = "0" + str(hour)
 
         for task in tasks:
-            if (str(week_day) in task.get_days_list() and str(hour) in task.get_times_list()) or (str(hour) in task.get_times_list() and task.current_state != None and task.current_state.split(':')[0] == 'work'):
 
-                task_users = s.query(PeriodicTaskUser).filter_by(task_id=task.id).all()
+            if task.current_state != None:
 
-                for task_user in task_users:
-                    user = get_user(task_user.worker_id)
+                if str(hour) in task.get_times_list():
 
-                    k = types.InlineKeyboardMarkup()
+                    task_users = s.query(PeriodicTaskUser).filter_by(task_id=task.id).all()
 
-                    k.row(types.InlineKeyboardButton('Да', callback_data=f'ans_to_p_t yes {task.id}'),
-                          types.InlineKeyboardButton('Нет', callback_data=f'ans_to_p_t no {task.id}'))
+                    for task_user in task_users:
+                        user = get_user(task_user.worker_id)
 
-                    mail(user.user_id, f"Вы выполнили это задание?\nНазвание: {task.title}", reply_markup=k)
+                        k = types.InlineKeyboardMarkup()
 
-                periodic_task_answers.apply_async([task.id],
+                        k.row(types.InlineKeyboardButton('Да', callback_data=f'ans_to_p_t yes {task.id}'),
+                              types.InlineKeyboardButton('Нет', callback_data=f'ans_to_p_t no {task.id}'))
+
+                        mail(user.user_id, f"Вы выполнили это задание?\nНазвание: {task.title}", reply_markup=k)
+
+                    periodic_task_answers.apply_async([task.id],
+                                                      eta=datetime.datetime.now() + datetime.timedelta(seconds=5))
+
+            else:
+
+                if str(week_day) in task.get_days_list() and str(hour) in task.get_times_list():
+
+                    task_users = s.query(PeriodicTaskUser).filter_by(task_id=task.id).all()
+
+                    for task_user in task_users:
+                        user = get_user(task_user.worker_id)
+
+                        k = types.InlineKeyboardMarkup()
+
+                        k.row(types.InlineKeyboardButton('Да', callback_data=f'ans_to_p_t yes {task.id}'),
+                              types.InlineKeyboardButton('Нет', callback_data=f'ans_to_p_t no {task.id}'))
+
+                        mail(user.user_id, f"Вы выполнили это задание?\nНазвание: {task.title}", reply_markup=k)
+
+                    periodic_task_answers.apply_async([task.id],
                                                   eta=datetime.datetime.now() + datetime.timedelta(seconds=5))
 
     except Exception as e:
