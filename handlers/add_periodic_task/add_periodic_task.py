@@ -282,12 +282,17 @@ async def add_task_workers(callback_query: CallbackQuery, state: FSMContext):
             worker_list += f"\n             {counter}. {worker.username}"
             counter += 1
 
-        days_list = ""
-        counter = 1
+        if data.get('schedule_type') == 'week_days':
 
-        for day in data.get('days'):
-            days_list += f"\n             {counter}. {week_days[int(day)]}"
-            counter += 1
+            days_list = ""
+            counter = 1
+
+            for day in data.get('days'):
+                days_list += f"\n             {counter}. {week_days[int(day)]}"
+                counter += 1
+
+        elif data.get('schedule_type') == 'work_rest':
+            days_list = f"{data.get('work_days')} на {data.get('rest_days')}"
 
         times_list = ""
         counter = 1
