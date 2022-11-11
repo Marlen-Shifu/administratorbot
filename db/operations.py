@@ -187,7 +187,7 @@ def create_task(title, description, date, time, creator_id, workers_list):
         return 'no'
 
 
-def create_periodic_task(title, description, days, work_days_count, rest_days_count, current_state, times, creator_id, workers_list, answers = None):
+def create_periodic_task(title, description, times, creator_id, workers_list, days = None, work_days_count=None, rest_days_count=None, current_state=None, answers = None):
 
     try:
 

@@ -338,11 +338,11 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
                 description=data.get('description'),
                 work_days_count = data.get('work_days'),
                 rest_days_count = data.get('rest_days'),
+                current_state=f"work:{data.get('work_days')}",
                 times=data.get('times'),
                 creator_id=get_user(id=None, username=mes.from_user.username).id,
                 workers_list=workers_list,
             )
-
 
         for worker_id in data.get('workers'):
             worker = get_user(worker_id)
