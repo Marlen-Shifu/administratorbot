@@ -15,6 +15,11 @@ from states import DeleteTask
 async def periodic_tasks_list(mes: types.Message):
     tasks = get_periodic_tasks()
 
+    if tasks == None:
+        await mes.answer("Список пуст")
+
+        return
+
     k = types.InlineKeyboardMarkup()
 
     for task in tasks:

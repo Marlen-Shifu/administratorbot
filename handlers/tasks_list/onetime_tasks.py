@@ -17,6 +17,11 @@ from states import DeleteOneTimeTask
 async def onetime_tasks_list(mes: types.Message):
     tasks = get_onetime_tasks()
 
+    if tasks == None:
+        await mes.answer("Список пуст")
+
+        return
+
     k = types.InlineKeyboardMarkup()
 
     for task in tasks:
