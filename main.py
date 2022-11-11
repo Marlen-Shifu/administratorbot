@@ -35,40 +35,40 @@ if __name__ == '__main__':
     add_user("Marlen45", POSITIONS.WORKER, id=840647074)
 
 
-    create_periodic_task(
-        title='Отчет прихода на работу',
-        description='Пусто',
-        days=[0, 1, 2, 3, 4],
-        times=['11:00'],
-        creator_id=1,
-        workers_list=[1]
-    )
+    # create_periodic_task(
+    #     title='Отчет прихода на работу',
+    #     description='Пусто',
+    #     days=[0, 1, 2, 3, 4],
+    #     times=['11:00'],
+    #     creator_id=1,
+    #     workers_list=[1]
+    # )
+    #
+    # create_periodic_task(
+    #     title='Отчет ухода с работы',
+    #     description='Пусто',
+    #     days=[0, 1, 2, 3, 4],
+    #     times=['17:00'],
+    #     creator_id=1,
+    #     workers_list=[1]
+    # )
 
-    create_periodic_task(
-        title='Отчет ухода с работы',
-        description='Пусто',
-        days=[0, 1, 2, 3, 4],
-        times=['17:00'],
-        creator_id=1,
-        workers_list=[1]
-    )
-
-    create_task(
-        title = 'Onetimetask1',
-        description="Пусто",
-        date = "2022-10-13",
-        time = "15:00",
-        creator_id=1,
-        workers_list=[1, 2]
-    )
-
-    create_task(
-        title = 'Onetimetask2',
-        description="Пусто",
-        date = "2022-10-13",
-        time = "14:00",
-        creator_id=1,
-        workers_list=[1, 2]
-    )
+    # create_task(
+    #     title = 'Onetimetask1',
+    #     description="Пусто",
+    #     date = "2022-10-13",
+    #     time = "15:00",
+    #     creator_id=1,
+    #     workers_list=[1, 2]
+    # )
+    #
+    # create_task(
+    #     title = 'Onetimetask2',
+    #     description="Пусто",
+    #     date = "2022-10-13",
+    #     time = "14:00",
+    #     creator_id=1,
+    #     workers_list=[1, 2]
+    # )
 
     start()
