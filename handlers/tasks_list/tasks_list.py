@@ -51,12 +51,17 @@ async def periodic_task(callback: types.CallbackQuery):
         worker_list += f"\n         {counter}. {worker.username}"
         counter += 1
 
-    days_list = ""
-    counter = 1
 
-    for day in task.get_days_list():
-        days_list += f"\n           {counter}. {week_days[int(day)-1]}"
-        counter += 1
+    if task.current_state == None:
+        days_list = ""
+        counter = 1
+
+        for day in task.get_days_list():
+            days_list += f"\n           {counter}. {week_days[int(day)-1]}"
+            counter += 1
+
+    else:
+        days_list = f'{task.work_days_count} на {task.rest_days_count}'
 
     times_list = ""
     counter = 1
