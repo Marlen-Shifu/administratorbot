@@ -109,7 +109,7 @@ def mail_service():
                         k.row(types.InlineKeyboardButton('Да', callback_data=f'ans_to_p_t yes {task.id}'),
                               types.InlineKeyboardButton('Нет', callback_data=f'ans_to_p_t no {task.id}'))
 
-                        mail(user.user_id, f"{task.current_task}")
+                        mail(user.user_id, f"{task.current_state}")
                         mail(user.user_id, f"Вы выполнили это задание?\nНазвание: {task.title}", reply_markup=k)
 
                     periodic_task_answers.apply_async([task.id],
