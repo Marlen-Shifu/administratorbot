@@ -93,7 +93,7 @@ def mail_service():
 
         for task in tasks:
 
-            if task.current_state != None:
+            if task.current_state is not None:
 
                 if str(hour) in task.get_times_list() and task.current_state.split(':')[0] == 'work':
 
