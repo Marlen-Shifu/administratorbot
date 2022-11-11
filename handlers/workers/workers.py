@@ -11,6 +11,11 @@ from states import DeleteWorker
 async def workers_list(mes: types.Message):
     workers_list = get_all_workers()
 
+    if workers_list == None:
+        await mes.answer("Список пуст")
+
+        return
+
     k = types.InlineKeyboardMarkup()
 
     for worker in workers_list:
