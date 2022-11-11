@@ -187,14 +187,17 @@ def create_task(title, description, date, time, creator_id, workers_list):
         return 'no'
 
 
-def create_periodic_task(title, description, days, times, creator_id, workers_list, answers = None):
+def create_periodic_task(title, description, days, work_days_count, rest_days_count, current_state, times, creator_id, workers_list, answers = None):
 
     try:
 
-        task_days = ''
+        if days == None:
+            task_days = None
+        else:
+            task_days = ''
 
-        for day in days:
-            task_days += f' {int(day)+1}'
+            for day in days:
+                task_days += f' {int(day)+1}'
 
         task_times = ''
 
@@ -205,6 +208,9 @@ def create_periodic_task(title, description, days, times, creator_id, workers_li
             title = title,
             description = description,
             days = task_days,
+            work_days_count = work_days_count,
+            rest_days_count = rest_days_count,
+            current_state = current_state,
             times = task_times,
             creator_id = creator_id,
             answers = answers
@@ -418,6 +424,14 @@ def create_periodic_task_answer(task_id, user_id, answer,type, value):
         print(e)
         raise e
 
+def set_new_periodic_task_state(task_id, new_state):
+    try:
+        task = get_periodic_task(task_id)
+        task.current_state = new_state
+        s.commit()
+    except Exception as e:
+        print(e)
+        raise e
 
 
 def get_onetime_task_user_answer(task_id, user_id):

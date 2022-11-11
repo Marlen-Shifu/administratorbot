@@ -10,7 +10,7 @@ from db.models import User, OneTimeTaskUser, PeriodicTask, PeriodicTaskUser, db_
 
 from db.operations import get_task, get_task_users, get_user, get_periodic_task, get_periodic_tasks, \
     update_task_answers, get_all_task_answers, get_onetime_tasks, get_onetime_task_answers, get_periodic_task_answers, \
-    get_periodic_task_users
+    get_periodic_task_users, set_new_periodic_task_state
 
 from utils.mailing.mail import mail, mail_document
 
@@ -41,6 +41,38 @@ def setup_periodic_tasks(sender, **kwargs):
 #     }
 # }
 
+
+
+@app.task(max_retries=10, default_retry_delay=3)
+def periodic_task_days_counter():
+
+    tasks = get_periodic_tasks()
+
+    for task in tasks:
+
+        if task.current_state == None:
+            continue
+
+        else:
+            state_data = task.current_state.split(':')
+
+            state_type = state_data[0]
+            days_count = int(state_data[1])
+
+            new_state = None
+
+            if days_count - 1 == 0:
+
+                if state_type == 'work':
+                    new_state = f"rest:{task.rest_days_count}"
+
+                elif state_type == 'rest':
+                    new_state = f"work:{task.work_days_count}"
+
+            else:
+                new_state = f"{state_type}:{days_count-1}"
+
+            set_new_periodic_task_state(task.id, new_state)
 
 @app.task(max_retries=10, default_retry_delay=3)
 def mail_service():

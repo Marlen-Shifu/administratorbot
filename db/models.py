@@ -84,7 +84,12 @@ class PeriodicTask(Base):
     task_id = Column(String(255))
     title = Column(String(255))
     description = Column(TEXT)
-    days = Column(String(255))
+    days = Column(String(255), nullable=True)
+
+    work_days_count = Column(Integer(), nullable=True)
+    rest_days_count = Column(Integer(), nullable=True)
+    current_state = Column(String(255), nullable=True)
+
     times = Column(String(255))
     creator_id = Column(Integer)
     answers = Column(TEXT, nullable=True)

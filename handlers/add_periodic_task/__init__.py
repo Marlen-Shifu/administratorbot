@@ -5,15 +5,7 @@ from states import *
 
 from aiogram_calendar import simple_cal_callback
 
-from .add_periodic_task import add_task,\
-    add_task_title,\
-    add_task_des,\
-    process_simple_calendar,\
-    add_task_time,\
-    add_task_workers,\
-    add_task_confirm,\
-    answer_to_task, \
-    comment_task
+from .add_periodic_task import *
 
 
 
@@ -21,6 +13,9 @@ def setup(dp: Dispatcher):
     dp.register_message_handler(add_task, lambda m: m.text == 'Добавить периодичную задачу')
     dp.register_message_handler(add_task_title, state=AddPeriodicTask.title)
     dp.register_message_handler(add_task_des, state=AddPeriodicTask.description)
+    dp.register_message_handler(choose_schedule_type, state=AddPeriodicTask.choose_schedule_type)
+    dp.register_message_handler(get_work_days_count, state=AddPeriodicTask.work_days_count)
+    dp.register_message_handler(get_rest_days_count, state=AddPeriodicTask.rest_days_count)
     dp.register_callback_query_handler(process_simple_calendar, state=AddPeriodicTask.days)
     dp.register_callback_query_handler(add_task_time, state=AddPeriodicTask.times)
     dp.register_callback_query_handler(add_task_workers, state=AddPeriodicTask.workers)

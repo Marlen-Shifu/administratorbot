@@ -25,7 +25,14 @@ class AddOneTimeTask(StatesGroup):
 class AddPeriodicTask(StatesGroup):
     title = State()
     description = State()
+
+    choose_schedule_type = State()
+
     days = State()
+
+    work_days_count = State()
+    rest_days_count = State()
+
     times = State()
     workers = State()
     confirm = State()

@@ -43,15 +43,74 @@ async def add_task_title(mes: types.Message, state: FSMContext):
 async def add_task_des(mes: types.Message, state: FSMContext):
     await state.update_data(description=mes.text)
 
-    await AddPeriodicTask.days.set()
+    await AddPeriodicTask.choose_schedule_type.set()
 
-    k = choose_week_day_table()
+    k = ReplyKeyboardMarkup()
 
-    k.add(InlineKeyboardButton('Рабочие дни', callback_data='work_days'))
-    k.add(InlineKeyboardButton('Выходные дни', callback_data='rest_days'))
-    k.add(InlineKeyboardButton('Все дни', callback_data='all_days'))
+    k.add(KeyboardButton('Выбрать дни недели'))
+    k.add(KeyboardButton('Указать дни через дни'))
 
-    await mes.answer("Выберите дни работы", reply_markup=k)
+    await mes.answer("Выберите тип графика", reply_markup=k)
+
+
+async def choose_schedule_type(mes: types.Message, state: FSMContext):
+    if mes.text == "Выбрать дни недели":
+
+        await state.update_data(schedule_type = 'week_days')
+
+        await AddPeriodicTask.days.set()
+
+        k = choose_week_day_table()
+
+        k.add(InlineKeyboardButton('Рабочие дни', callback_data='work_days'))
+        k.add(InlineKeyboardButton('Выходные дни', callback_data='rest_days'))
+        k.add(InlineKeyboardButton('Все дни', callback_data='all_days'))
+
+        await mes.answer("Выберите дни работы", reply_markup=k)
+
+    elif mes.text == "Указать дни через дни":
+
+        await state.update_data(schedule_type = 'work_rest')
+
+        await AddPeriodicTask.work_days_count.set()
+
+        k = ReplyKeyboardMarkup(resize_keyboard=True)
+
+        k.add(KeyboardButton('Пусто'))
+        k.add(KeyboardButton('Отмена'))
+
+        await mes.answer("Отправьте количество рабочих дней", reply_markup=k)
+
+
+async def get_work_days_count(mes: types.Message, state: FSMContext):
+
+    try:
+        work_days = int(mes.text)
+
+    except Exception as e:
+        await mes.answer('Введите число')
+        return
+
+    await state.update_data(work_days = work_days)
+    await AddPeriodicTask.rest_days_count.set()
+
+    await mes.answer("Отправьте количество выходных дней")
+
+
+async def get_rest_days_count(mes: types.Message, state:FSMContext):
+
+    try:
+        rest_days = int(mes.text)
+
+    except Exception as e:
+        await mes.answer('Введите число')
+        return
+
+    await state.update_data(rest_days = rest_days)
+
+    await AddPeriodicTask.times.set()
+
+    await mes.answer("Выберите времена", reply_markup=day_time_board())
 
 
 async def process_simple_calendar(callback_query: CallbackQuery, state: FSMContext):
@@ -256,14 +315,29 @@ async def add_task_confirm(mes: types.Message, state: FSMContext):
 
         workers_list = data.get('workers')
 
-        task_id = create_periodic_task(
-            title=data.get('title'),
-            description=data.get('description'),
-            days=data.get('days'),
-            times=data.get('times'),
-            creator_id=get_user(id=None, username=mes.from_user.username).id,
-            workers_list=workers_list,
-        )
+        if data.get('schedule_type') == 'week_days':
+
+            task_id = create_periodic_task(
+                title=data.get('title'),
+                description=data.get('description'),
+                days=data.get('days'),
+                times=data.get('times'),
+                creator_id=get_user(id=None, username=mes.from_user.username).id,
+                workers_list=workers_list,
+            )
+
+        elif data.get('schedule_type') == 'work_rest':
+
+            task_id = create_periodic_task(
+                title=data.get('title'),
+                description=data.get('description'),
+                work_days_count = data.get('work_days'),
+                rest_days_count = data.get('rest_days'),
+                times=data.get('times'),
+                creator_id=get_user(id=None, username=mes.from_user.username).id,
+                workers_list=workers_list,
+            )
+
 
         for worker_id in data.get('workers'):
             worker = get_user(worker_id)
