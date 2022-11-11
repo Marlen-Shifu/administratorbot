@@ -95,7 +95,7 @@ def mail_service():
 
             if task.current_state != None:
 
-                if str(hour) in task.get_times_list():
+                if str(hour) in task.get_times_list() and task.current_state.split(':')[0] == 'work':
 
                     task_users = s.query(PeriodicTaskUser).filter_by(task_id=task.id).all()
 
