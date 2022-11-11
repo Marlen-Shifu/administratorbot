@@ -27,6 +27,7 @@ def setup_periodic_tasks(sender, **kwargs):
     # sender.add_periodic_task(crontab(minute=0, hour='*/1'), mail_service.s())
     # sender.add_periodic_task(5.0, mail_service.s())
     sender.add_periodic_task(10.0, mail_service.s())
+    sender.add_periodic_task(20.0, periodic_task_days_counter.s())
 
 
 # app.conf.beat_schedule = {
@@ -74,6 +75,7 @@ def periodic_task_days_counter():
 
             set_new_periodic_task_state(task.id, new_state)
 
+
 @app.task(max_retries=10, default_retry_delay=3)
 def mail_service():
     try:
@@ -107,6 +109,7 @@ def mail_service():
                         k.row(types.InlineKeyboardButton('Да', callback_data=f'ans_to_p_t yes {task.id}'),
                               types.InlineKeyboardButton('Нет', callback_data=f'ans_to_p_t no {task.id}'))
 
+                        mail(user.user_id, f"{task.current_task}")
                         mail(user.user_id, f"Вы выполнили это задание?\nНазвание: {task.title}", reply_markup=k)
 
                     periodic_task_answers.apply_async([task.id],
