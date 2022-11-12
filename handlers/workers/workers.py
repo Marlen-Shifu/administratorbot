@@ -37,7 +37,7 @@ async def my_workers_list(mes: types.Message):
 
     for worker in workers_list:
 
-        k.add(types.InlineKeyboardButton(f'{worker.username}', callback_data=f''))
+        k.add(types.InlineKeyboardButton(f'{worker.username}', callback_data=f'1'))
 
     await mes.answer("Список работников", reply_markup=k)
 
