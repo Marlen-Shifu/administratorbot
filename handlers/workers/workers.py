@@ -25,6 +25,23 @@ async def workers_list(mes: types.Message):
     await mes.answer("Список работников", reply_markup=k)
 
 
+async def my_workers_list(mes: types.Message):
+    workers_list = get_all_workers()
+
+    if workers_list == None:
+        await mes.answer("Список пуст")
+
+        return
+
+    k = types.InlineKeyboardMarkup()
+
+    for worker in workers_list:
+
+        k.add(types.InlineKeyboardButton(f'{worker.username}', callback_data=f''))
+
+    await mes.answer("Список работников", reply_markup=k)
+
+
 async def delete_worker_confirm(callback: types.CallbackQuery):
     data = callback.data.split(' ')
     await callback.answer()
