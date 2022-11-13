@@ -486,9 +486,9 @@ def periodic_tasks_report_write(writer, tasks_list):
 
         today = datetime.datetime.today().date()
 
-        for task in task_answers:
+        for task_answer in task_answers:
             if task.time.date() == today:
-                today_task_answers.append(task)
+                today_task_answers.append(task_answer)
 
         for time in task.get_times_list():
             add_row(task.title, task.description, time)
