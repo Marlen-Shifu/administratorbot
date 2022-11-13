@@ -379,10 +379,13 @@ async def answer_to_task(callback: types.CallbackQuery):
 
     user = get_worker_by_userid(callback.from_user.id)
 
+    today = datetime.datetime.today()
+
     def user_is_answered(user, answers_list):
         for answer in answers_list:
             if user.id == answer.user_id:
-                return True
+                if answer.time.day == today.day and answer.time.hour == today.hour:
+                    return True
 
         return False
 
