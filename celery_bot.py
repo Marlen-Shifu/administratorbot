@@ -385,8 +385,6 @@ def tasks_report(user_id):
                 if task.current_state.split(':')[0] == 'work':
                     today_p_tasks.append(task)
 
-        mail(user_id, f'{today_p_tasks}')
-
         periodic_tasks_report_write(writer, today_p_tasks)
 
         writer.save()
