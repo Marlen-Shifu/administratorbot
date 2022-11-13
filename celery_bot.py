@@ -378,8 +378,12 @@ def tasks_report(user_id):
         today_p_tasks = []
 
         for task in p_tasks:
-            if str(today.weekday() + 1) in task.get_days_list():
-                today_p_tasks.append(task)
+            if task.current_state == None:
+                if str(today.weekday() + 1) in task.get_days_list():
+                    today_p_tasks.append(task)
+            else:
+                if task.current_state.split(':')[0] == 'work':
+                    today_p_tasks.append(task)
 
         mail(user_id, f'{today_p_tasks}')
 
