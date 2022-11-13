@@ -481,10 +481,19 @@ def periodic_tasks_report_write(writer, tasks_list):
 
     for task in tasks_list:
         task_answers = get_periodic_task_answers(task.id)
+
+        today_task_answers = []
+
+        today = datetime.datetime.today().date()
+
+        for task in task_answers:
+            if task.time.date() == today:
+                today_task_answers.append(task)
+
         for time in task.get_times_list():
             add_row(task.title, task.description, time)
 
-            for task_answer in task_answers:
+            for task_answer in today_task_answers:
                 if int(time) == task_answer.time.hour:
 
                     worker = get_user(task_answer.user_id)
