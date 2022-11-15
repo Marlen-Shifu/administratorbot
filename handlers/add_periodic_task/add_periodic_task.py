@@ -388,18 +388,15 @@ async def answer_to_task(callback: types.CallbackQuery):
         minute = 0
 
     for task in answers:
-        await callback.bot.send_message(callback.from_user.id, f'{task.time}')
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.day}')
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.hour}')
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.minute}')
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.date() == today.date()}')
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.hour == today.hour}')
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.minute == minute}')
 
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.date()}')
-        await callback.bot.send_message(callback.from_user.id, f'{today.date()}')
 
     def user_is_answered(user, answers_list):
-        for answer in answers_list:
-            if user.id == answer.user_id:
-                if answer.time.date() == today.date() and answer.time.hour == today.hour and answer.time.minute == minute:
+        for task_answer in answers_list:
+            if user.id == task_answer.user_id:
+                if task_answer.time.date() == today.date() and task_answer.time.hour == today.hour and task_answer.time.minute == minute:
                     return True
 
         return False
