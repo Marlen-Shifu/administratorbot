@@ -421,7 +421,7 @@ def create_periodic_task_answer(task_id, user_id, answer,type, value):
             answer = answer,
             answer_type = type,
             answer_value = value,
-            time = datetime.datetime.strptime(f"{minute}", "%M")
+            time = time.strptime(f"{minute}", "%M")
         )
 
         s.add(ins)
@@ -430,6 +430,7 @@ def create_periodic_task_answer(task_id, user_id, answer,type, value):
     except Exception as e:
         print(e)
         raise e
+
 
 def set_new_periodic_task_state(task_id, new_state):
     try:

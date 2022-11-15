@@ -95,6 +95,9 @@ def mail_service():
         if len(str(hour)) == 1:
             hour = "0" + str(hour)
 
+        if len(str(minute)) == 1:
+            minute = "0" + str(minute)
+
         for task in tasks:
 
             if task.current_state is not None:
