@@ -379,7 +379,7 @@ async def answer_to_task(callback: types.CallbackQuery):
 
     user = get_worker_by_userid(callback.from_user.id)
 
-    today = datetime.datetime.today()
+    today = datetime.datetime.today() + datetime.timedelta(hours=6)
 
 
     if today.minute > 30:
@@ -387,21 +387,21 @@ async def answer_to_task(callback: types.CallbackQuery):
     else:
         minute = 0
 
-    for task in answers:
-
-        await callback.bot.send_message(callback.from_user.id, f'{task.time}')
-
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.date()}')
-        await callback.bot.send_message(callback.from_user.id, f'{today.date()}')
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.date() == today.date()}')
-
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.hour}')
-        await callback.bot.send_message(callback.from_user.id, f'{today.hour}')
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.hour == today.hour}')
-
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.minute}')
-        await callback.bot.send_message(callback.from_user.id, f'{minute}')
-        await callback.bot.send_message(callback.from_user.id, f'{task.time.minute == minute}')
+    # for task in answers:
+    #
+    #     await callback.bot.send_message(callback.from_user.id, f'{task.time}')
+    #
+    #     await callback.bot.send_message(callback.from_user.id, f'{task.time.date()}')
+    #     await callback.bot.send_message(callback.from_user.id, f'{today.date()}')
+    #     await callback.bot.send_message(callback.from_user.id, f'{task.time.date() == today.date()}')
+    #
+    #     await callback.bot.send_message(callback.from_user.id, f'{task.time.hour}')
+    #     await callback.bot.send_message(callback.from_user.id, f'{today.hour}')
+    #     await callback.bot.send_message(callback.from_user.id, f'{task.time.hour == today.hour}')
+    #
+    #     await callback.bot.send_message(callback.from_user.id, f'{task.time.minute}')
+    #     await callback.bot.send_message(callback.from_user.id, f'{minute}')
+    #     await callback.bot.send_message(callback.from_user.id, f'{task.time.minute == minute}')
 
 
     def user_is_answered(user, answers_list):
