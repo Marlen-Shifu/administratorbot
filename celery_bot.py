@@ -92,6 +92,11 @@ def mail_service():
         hour = now.hour
         minute = now.minute
 
+        if minute > 30:
+            minute = 30
+        else:
+            minute = 0
+
         if len(str(hour)) == 1:
             hour = "0" + str(hour)
 
