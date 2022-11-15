@@ -67,8 +67,10 @@ async def periodic_task(callback: types.CallbackQuery):
     counter = 1
 
     for time in task.get_times_list():
-        times_list += f"\n          {counter}. {time}:00"
+        times_list += f"\n          {counter}. {time}"
         counter += 1
+
+    await callback.bot.send_message(callback.from_user.id, f"{task.times}")
 
     await callback.bot.send_message(callback.from_user.id,
                                           f"""

@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, func, DateTime, TEXT
+from sqlalchemy import create_engine, Column, Integer, String, func, DateTime, TEXT, JSON
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.pool import QueuePool
@@ -90,13 +90,13 @@ class PeriodicTask(Base):
     rest_days_count = Column(Integer(), nullable=True)
     current_state = Column(String(255), nullable=True)
 
-    times = Column(String(255))
+    times = Column(JSON())
     creator_id = Column(Integer)
     answers = Column(TEXT, nullable=True)
 
     def get_times_list(self):
 
-        return self.times.strip().split(' ')
+        return json.loads(self.times)['times']
 
     def get_days_list(self):
 

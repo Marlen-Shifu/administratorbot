@@ -199,10 +199,10 @@ def create_periodic_task(title, description, times, creator_id, workers_list, da
             for day in days:
                 task_days += f' {int(day)+1}'
 
-        task_times = ''
-
-        for time in times:
-            task_times += f' {time.split(":")[0]}'
+        # task_times = []
+        #
+        # for time in times:
+        #     task_times += f' {time.split(":")[0]}'
 
         task = PeriodicTask(
             title = title,
@@ -211,7 +211,7 @@ def create_periodic_task(title, description, times, creator_id, workers_list, da
             work_days_count = work_days_count,
             rest_days_count = rest_days_count,
             current_state = current_state,
-            times = task_times,
+            times = json.dumps({'times': times}),
             creator_id = creator_id,
             answers = answers
         )
