@@ -98,6 +98,14 @@ class PeriodicTask(Base):
 
         return json.loads(self.times)['times']
 
+    def time_in_times_list(self, time):
+        times_list = self.get_times_list()
+
+        if time in times_list:
+            return True
+        else:
+            return False
+
     def get_days_list(self):
 
         return self.days.strip().split(' ')

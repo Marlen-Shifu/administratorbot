@@ -24,7 +24,7 @@ app = Celery('tasks', broker='redis://:RedisPass@redis:6379/0', backend='redis:/
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(crontab(minute=0, hour='*/1'), mail_service.s())
+    sender.add_periodic_task(crontab(minute='0,30', hour='*/1'), mail_service.s())
     sender.add_periodic_task(crontab(minute=0, hour=0), periodic_task_days_counter.s())
     # sender.add_periodic_task(20.0, periodic_task_days_counter.s())
     # sender.add_periodic_task(5.0, mail_service.s())
@@ -90,6 +90,7 @@ def mail_service():
 
         week_day = now.weekday() + 1
         hour = now.hour
+        minute = now.minute
 
         if len(str(hour)) == 1:
             hour = "0" + str(hour)
@@ -98,7 +99,7 @@ def mail_service():
 
             if task.current_state is not None:
 
-                if str(hour) in task.get_times_list() and task.current_state.split(':')[0] == 'work':
+                if task.current_state.split(':')[0] == 'work' and task.time_in_times_list(f"{hour}:{minute}") :
 
                     task_users = s.query(PeriodicTaskUser).filter_by(task_id=task.id).all()
 
@@ -118,7 +119,7 @@ def mail_service():
 
             else:
 
-                if str(week_day) in task.get_days_list() and str(hour) in task.get_times_list():
+                if str(week_day) in task.get_days_list() and task.time_in_times_list(f"{hour}:{minute}"):
 
                     task_users = s.query(PeriodicTaskUser).filter_by(task_id=task.id).all()
 

@@ -408,13 +408,20 @@ def create_periodic_task_answer(task_id, user_id, answer,type, value):
         offset = datetime.timedelta(hours=6)
         timez = datetime.timezone(offset)
 
+        time = datetime.datetime.now() + offset
+
+        if time.minute > 30:
+            minute = 30
+        else:
+            minute = 0
+
         ins = PeriodicTaskAnswer(
             task_id = task_id,
             user_id = user_id,
             answer = answer,
             answer_type = type,
             answer_value = value,
-            time = datetime.datetime.now() + offset
+            time = datetime.datetime.strptime(f"{minute}", "%M")
         )
 
         s.add(ins)
