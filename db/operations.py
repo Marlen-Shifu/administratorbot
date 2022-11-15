@@ -421,7 +421,7 @@ def create_periodic_task_answer(task_id, user_id, answer,type, value):
             answer = answer,
             answer_type = type,
             answer_value = value,
-            time = time.strptime(f"{minute}", "%M")
+            time = time.strptime(f"{time.year}-{time.month}-{time.day} {time.hour}:{minute}", "%Y-%m-%d %H:%M")
         )
 
         s.add(ins)
