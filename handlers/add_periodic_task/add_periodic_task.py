@@ -388,8 +388,19 @@ async def answer_to_task(callback: types.CallbackQuery):
         minute = 0
 
     for task in answers:
+
+        await callback.bot.send_message(callback.from_user.id, f'{task.time}')
+
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.date()}')
+        await callback.bot.send_message(callback.from_user.id, f'{today.date()}')
         await callback.bot.send_message(callback.from_user.id, f'{task.time.date() == today.date()}')
+
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.hour}')
+        await callback.bot.send_message(callback.from_user.id, f'{today.hour}')
         await callback.bot.send_message(callback.from_user.id, f'{task.time.hour == today.hour}')
+
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.minute}')
+        await callback.bot.send_message(callback.from_user.id, f'{minute}')
         await callback.bot.send_message(callback.from_user.id, f'{task.time.minute == minute}')
 
 
