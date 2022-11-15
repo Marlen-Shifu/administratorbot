@@ -389,6 +389,9 @@ async def answer_to_task(callback: types.CallbackQuery):
 
     for task in answers:
         await callback.bot.send_message(callback.from_user.id, f'{task.time}')
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.day}')
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.hour}')
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.minute}')
 
     def user_is_answered(user, answers_list):
         for answer in answers_list:
