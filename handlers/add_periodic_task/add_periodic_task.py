@@ -393,10 +393,12 @@ async def answer_to_task(callback: types.CallbackQuery):
         await callback.bot.send_message(callback.from_user.id, f'{task.time.hour}')
         await callback.bot.send_message(callback.from_user.id, f'{task.time.minute}')
 
+        await callback.bot.send_message(callback.from_user.id, f'{task.time.minute}')
+
     def user_is_answered(user, answers_list):
         for answer in answers_list:
             if user.id == answer.user_id:
-                if answer.time.day == today.day and answer.time.hour == today.hour and answer.time.minute == minute:
+                if answer.time.date() == today.date() and answer.time.hour == today.hour and answer.time.minute == minute:
                     return True
 
         return False
