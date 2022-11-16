@@ -162,16 +162,29 @@ def periodic_task_answers(task_id):
 
         task_answers = get_periodic_task_answers(task_id)
 
+        today_task_answers = []
+
+        today = datetime.datetime.today()
+
+        for task_answer in task_answers:
+            if task_answer.time.date() == today.date():
+                today_task_answers.append(task_answer)
+
         send_text = f"Ответы на задание \"{task.title}\""
 
         answers_yes = []
         answers_no = []
 
-        if task_answers == None:
+        answered_workers = []
+
+        if today_task_answers == None:
             mail(creator.user_id, "Ответов нет")
             return
 
-        for answer in task_answers:
+        for answer in today_task_answers:
+
+            answered_workers.append(get_user(answer.user_id).username)
+
             if answer.answer == 'yes':
                 answers_yes.append(answer)
             else:
@@ -205,10 +218,8 @@ def periodic_task_answers(task_id):
         not_answered = []
 
         def user_is_answered(user, answers_list):
-            for answer in answers_list:
-                if user.id == answer.user_id:
-                    return True
-
+            if user.username in answered_workers:
+                return True
             return False
 
         for task_user in task_users:
