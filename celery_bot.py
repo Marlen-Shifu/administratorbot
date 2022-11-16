@@ -497,19 +497,23 @@ def periodic_tasks_report_write(writer, tasks_list):
 
         today_task_answers = []
 
-        today = datetime.datetime.today().date()
+        today = datetime.datetime.today()
 
         for task_answer in task_answers:
-            if task_answer.time.date() == today:
+            if task_answer.time.date() == today.date():
                 today_task_answers.append(task_answer)
 
         for time in task.get_times_list():
             add_row(task.title, task.description, time)
 
+            answered_workers = []
+
             for task_answer in today_task_answers:
                 if int(time.split(':')[0]) == task_answer.time.hour and int(time.split(':')[1]) == task_answer.time.minute:
 
                     worker = get_user(task_answer.user_id)
+
+                    answered_workers.append(worker.username)
 
                     if task_answer.answer == 'yes':
                         add_row(worker=worker.username, answer_yes='+')
@@ -518,22 +522,28 @@ def periodic_tasks_report_write(writer, tasks_list):
 
 
 
-        task_users = get_periodic_task_users(task.id)
+            task_users = get_periodic_task_users(task.id)
 
-        task_users = [get_user(task_user.worker_id) for task_user in task_users]
+            task_users = [get_user(task_user.worker_id) for task_user in task_users]
 
-        def user_is_answered(user, answers_list):
-            for answer in answers_list:
-                if user.id == answer.user_id:
+            def user_is_answered(user, answers_list):
+                # for answer in answers_list:
+                #     if user.id == answer.user_id:
+                #         return True
+                #
+                #     if user.id == answer.user_id:
+                #         if answer.time.date() == today.date() and answer.time.hour == today.hour and answer.time.minute == minute:
+                #             return True
+
+                if user.username in answered_workers:
                     return True
+                return False
 
-            return False
-
-        for task_user in task_users:
-            if user_is_answered(task_user, task_answers):
-                continue
-            else:
-                add_row(worker=task_user.username, answer_not='?')
+            for task_user in task_users:
+                if user_is_answered(task_user, task_answers):
+                    continue
+                else:
+                    add_row(worker=task_user.username, answer_not='?')
 
     df = pd.DataFrame({'Название': titles, 'Описание': dess, 'Время': times, 'Работник': workers, 'Да': answers_yes,
                        'Нет': answers_no, 'Нет ответа': answers_not})
