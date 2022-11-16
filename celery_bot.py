@@ -507,7 +507,7 @@ def periodic_tasks_report_write(writer, tasks_list):
             add_row(task.title, task.description, time)
 
             for task_answer in today_task_answers:
-                if int(time) == task_answer.time.hour:
+                if int(time.split(':')[0]) == task_answer.time.hour and int(time.split(':')[1]) == task_answer.time.minute:
 
                     worker = get_user(task_answer.user_id)
 
