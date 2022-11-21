@@ -6,6 +6,8 @@ services:
        depends_on:
          - redis
          - database
+       ports:
+       - "5000:5000"
    redis:
      image: redis:latest
      restart: always
@@ -38,4 +40,4 @@ services:
    nginx:
      image: nginx
      ports:
-     - "5000:5000"
+     - "6000:6000"
