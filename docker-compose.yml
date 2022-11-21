@@ -37,3 +37,5 @@ services:
 
    nginx:
      image: nginx
+     ports:
+     - "5000:5000"
