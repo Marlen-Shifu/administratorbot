@@ -13,7 +13,7 @@ from config import BOT_TOKEN, POSITIONS
 # celery -A celery_bot worker -l info --concurrency 1 -P gevent
 from db.operations import add_user, create_periodic_task, create_task
 
-from .flask_app import app
+from flask_app import app
 
 logging.basicConfig(level=logging.INFO)
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     #     workers_list=[1, 2]
     # )
 
+    app.run()
     start()
 
-    app.run()
 
