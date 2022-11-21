@@ -410,7 +410,7 @@ def create_periodic_task_answer(task_id, user_id, answer,type, value):
 
         time = datetime.datetime.now() + offset
 
-        if time.minute > 30:
+        if time.minute >= 30:
             minute = 30
         else:
             minute = 0
