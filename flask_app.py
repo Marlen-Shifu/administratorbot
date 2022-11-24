@@ -1,11 +1,18 @@
 from flask import Flask
 
+from flask import render_template
+
+from db.operations import get_all_workers
+
 
 app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+
+    workers = [worker.username for worker in get_all_workers()]
+
+    return render_template("index.html", workers = workers)
 
 
 if __name__ == '__main__':
