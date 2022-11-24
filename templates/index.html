@@ -8,7 +8,7 @@
     <div class="workers">
         {% for worker in workers %}
         <div class="worker">
-            <a href="{% url_for 'check' {{ worker }} %}">{{ worker }}</a>
+            <a href="{{ url_for('check', username=worker }}">{{ worker }}</a>
         </div>
         {% endfor %}
     </div>
