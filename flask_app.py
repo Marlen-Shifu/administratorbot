@@ -6,6 +6,7 @@ from flask import render_template
 
 from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks, get_periodic_task_users_of_user, \
     get_user
+from utils.mailing.mail import mail
 
 app = Flask(__name__)
 
@@ -29,6 +30,8 @@ def check(username):
 
     today_p_tasks = []
 
+    mail(user.user_id, f"{p_tasks}")
+
     for task in p_tasks:
         if task.current_state is None:
             if str(now.today().date().weekday() + 1) in task.get_days_list():
@@ -36,6 +39,8 @@ def check(username):
         else:
             if task.current_state.split(':')[0] == 'work':
                 today_p_tasks.append(task)
+
+    mail(user.user_id, f"{today_p_tasks}")
 
     hour = now.hour
 
@@ -60,6 +65,9 @@ def check(username):
 
 
     now_str = f"{hour}:{minute}"
+
+    mail(user.user_id, f"{now_str}")
+
 
 
     for task in today_p_tasks:
