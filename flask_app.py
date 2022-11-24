@@ -1,18 +1,75 @@
+import datetime
+
 from flask import Flask
 
 from flask import render_template
 
-from db.operations import get_all_workers
-
+from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks
 
 app = Flask(__name__)
 
+
 @app.route("/")
-def hello_world():
+def home():
 
     workers = [worker.username for worker in get_all_workers()]
 
     return render_template("index.html", workers = workers)
+
+
+@app.route("/username/<username>")
+def check(username):
+
+    now = datetime.datetime.now()
+
+    p_tasks = get_periodic_tasks()
+
+    today_p_tasks = []
+
+    for task in p_tasks:
+        if task.current_state is None:
+            if str(now.today().date().weekday() + 1) in task.get_days_list():
+                today_p_tasks.append(task)
+        else:
+            if task.current_state.split(':')[0] == 'work':
+                today_p_tasks.append(task)
+
+    hour = now.hour
+
+    if len(str(hour)) == 1:
+        minute = "0" + str(hour)
+
+    elif len(str(hour)) == 2:
+        minute = str(hour)
+
+    minute = now.minute
+
+    if minute >= 30:
+        minute = 30
+    else:
+        minute = 0
+
+    if len(str(minute)) == 1:
+        minute = str(minute) + "0"
+
+    elif len(str(minute)) == 2:
+        minute = str(minute)
+
+
+    now_str = f"{hour}:{minute}"
+
+
+    for task in today_p_tasks:
+
+        times = task.get_times_list()
+
+        for time in times:
+            if time == now_str:
+                return f"You can answer for time: {now_str}\nTask: {task.title}"
+
+    return f"You can NOT answer((("
+
+
 
 
 if __name__ == '__main__':

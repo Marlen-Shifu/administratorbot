@@ -126,11 +126,7 @@ def mail_service():
                                                       eta=datetime.datetime.now() + datetime.timedelta(seconds=5))
 
             else:
-                print(week_day)
-                print(task.get_days_list())
-                print(task.get_times_list())
-                print(f"{hour}:{minute}")
-                print(task.time_in_times_list(f"{hour}:{minute}"))
+
                 if str(week_day) in task.get_days_list() and task.time_in_times_list(f"{hour}:{minute}"):
 
                     task_users = s.query(PeriodicTaskUser).filter_by(task_id=task.id).all()
