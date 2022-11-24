@@ -4,7 +4,8 @@ from flask import Flask
 
 from flask import render_template
 
-from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks
+from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks, get_periodic_task_users_of_user, \
+    get_user
 
 app = Flask(__name__)
 
@@ -22,7 +23,9 @@ def check(username):
 
     now = datetime.datetime.now()
 
-    p_tasks = get_periodic_tasks()
+    user = get_user(None, username=username)
+
+    p_tasks = get_periodic_task_users_of_user()
 
     today_p_tasks = []
 
