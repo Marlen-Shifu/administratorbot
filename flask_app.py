@@ -6,6 +6,7 @@ from flask import render_template
 
 from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks, get_periodic_task_users_of_user, \
     get_user
+
 from utils.mailing.mail import mail
 
 app = Flask(__name__)
