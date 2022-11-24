@@ -25,7 +25,7 @@ def check(username):
 
     user = get_user(None, username=username)
 
-    p_tasks = get_periodic_task_users_of_user()
+    p_tasks = get_periodic_task_users_of_user(user.id)
 
     today_p_tasks = []
 
