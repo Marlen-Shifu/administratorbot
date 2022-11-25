@@ -31,7 +31,7 @@ def check(username):
 
     today_p_tasks = []
 
-    mail(user.user_id, f"{p_tasks}")
+    print(f"{p_tasks}")
 
     for task in p_tasks:
         if task.current_state is None:
@@ -41,7 +41,7 @@ def check(username):
             if task.current_state.split(':')[0] == 'work':
                 today_p_tasks.append(task)
 
-    mail(user.user_id, f"{today_p_tasks}")
+    print(f"{today_p_tasks}")
 
     hour = now.hour
 
@@ -67,7 +67,7 @@ def check(username):
 
     now_str = f"{hour}:{minute}"
 
-    mail(user.user_id, f"{now_str}")
+    print(f"{now_str}")
 
 
 
