@@ -5,7 +5,7 @@ from flask import Flask
 from flask import render_template
 
 from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks, get_periodic_task_users_of_user, \
-    get_user
+    get_user, get_periodic_tasks_of_user
 
 from utils.mailing.mail import mail
 
@@ -27,7 +27,7 @@ def check(username):
 
     user = get_user(None, username=username)
 
-    p_tasks = get_periodic_task_users_of_user(2)
+    p_tasks = get_periodic_tasks_of_user(2)
 
     today_p_tasks = []
 
