@@ -41,3 +41,5 @@ openpyxl==3.0.10
 xlrd==2.0.1
 xlsxwriter==3.0.3
 Flask==2.2.2
+Pillow==9.3.0
+qrcode==7.3.1
