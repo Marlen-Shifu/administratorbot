@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask
+from flask import Flask, url_for
 
 from flask import render_template
 
@@ -73,9 +73,9 @@ def check(username):
 
                 import qrcode
                 img = qrcode.make('http://94.247.128.225/test')
-                img.save("some_file.png")
+                img.save("static/some_file.png")
 
-                return f"You can answer for time: {now_str}\nTask: {task.title}\n{img}"
+                return f"You can answer for time: {now_str}\nTask: {task.title}\n{url_for('static', filename = 'some_file.png')}"
 
     return f"You can NOT answer(((\nTasks:{p_tasks}\nTodays:{today_p_tasks}\nTime:{now_str}"
 
