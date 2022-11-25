@@ -70,7 +70,12 @@ def check(username):
 
         for time in times:
             if time == now_str:
-                return f"You can answer for time: {now_str}\nTask: {task.title}"
+
+                import qrcode
+                img = qrcode.make('http://94.247.128.225/test')
+                img.save("some_file.png")
+
+                return f"You can answer for time: {now_str}\nTask: {task.title}\n{img}"
 
     return f"You can NOT answer(((\nTasks:{p_tasks}\nTodays:{today_p_tasks}\nTime:{now_str}"
 
