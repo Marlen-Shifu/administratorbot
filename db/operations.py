@@ -309,7 +309,7 @@ def get_all_onetime_task_users():
 
 def get_onetime_task_users_of_user(user_id):
     try:
-        res = s.query(OneTimeTaskUser).filter_by(worker_id = user_id)
+        res = s.query(OneTimeTaskUser).filter_by(worker_id = user_id).all()
 
         return res
     except Exception as e:
