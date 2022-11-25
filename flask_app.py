@@ -44,10 +44,10 @@ def check(username):
     hour = now.hour
 
     if len(str(hour)) == 1:
-        minute = "0" + str(hour)
+        hour = "0" + str(hour)
 
     elif len(str(hour)) == 2:
-        minute = str(hour)
+        hour = str(hour)
 
     minute = now.minute
 

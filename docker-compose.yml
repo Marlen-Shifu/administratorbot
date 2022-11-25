@@ -5,7 +5,10 @@ services:
      command: python flask_app.py
      ports:
        - "5000:5000"
-
+       depends_on:
+         - redis
+         - database
+        
    bot:
        build: .
        command: python main.py
