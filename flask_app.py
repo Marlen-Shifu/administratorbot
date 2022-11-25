@@ -31,7 +31,6 @@ def check(username):
 
     today_p_tasks = []
 
-    print(f"{p_tasks}")
 
     for task in p_tasks:
         if task.current_state is None:
@@ -41,7 +40,6 @@ def check(username):
             if task.current_state.split(':')[0] == 'work':
                 today_p_tasks.append(task)
 
-    print(f"{today_p_tasks}")
 
     hour = now.hour
 
@@ -64,12 +62,7 @@ def check(username):
     elif len(str(minute)) == 2:
         minute = str(minute)
 
-
     now_str = f"{hour}:{minute}"
-
-    print(f"{now_str}")
-
-
 
     for task in today_p_tasks:
 
@@ -79,7 +72,7 @@ def check(username):
             if time == now_str:
                 return f"You can answer for time: {now_str}\nTask: {task.title}"
 
-    return f"You can NOT answer((("
+    return f"You can NOT answer(((\nTasks:{p_tasks}\nTodays:{today_p_tasks}\nTime:{now_str}"
 
 
 
