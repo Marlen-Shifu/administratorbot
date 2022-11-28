@@ -9,7 +9,7 @@ from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks
 
 from utils.mailing.mail import mail
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 
 @app.route("/")
