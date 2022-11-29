@@ -75,7 +75,7 @@ def check(username):
                 img = qrcode.make(f'http://94.247.128.225/login/{username}/{now_str}')
                 img.save(f"static/f{username}_qr.png")
 
-                return f"You can answer for time: {now_str}\nTask: {task.title}\n<a href=\"{url_for('static', filename = f'/static/{username}_qr.png')}\">Login</a>"
+                return f"You can answer for time: {now_str}\nTask: {task.title}\n<a href=\"{url_for('static', filename = f'{username}_qr.png')}\">Login</a>"
 
     return f"You can NOT answer(((\nTasks:{p_tasks}\nTodays:{today_p_tasks}\nTime:{now_str}"
 
