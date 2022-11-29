@@ -450,7 +450,6 @@ async def comment_task(mes: types.Message, state: FSMContext):
 
     answer = data.get('answer')
 
-    answers = get_periodic_task_answers(task_id)
 
     user = get_worker_by_userid(mes.from_user.id)
 

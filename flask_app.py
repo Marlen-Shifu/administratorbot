@@ -5,7 +5,7 @@ from flask import Flask, url_for
 from flask import render_template
 
 from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks, get_periodic_task_users_of_user, \
-    get_user, get_periodic_tasks_of_user
+    get_user, get_periodic_tasks_of_user, create_periodic_task_answer, get_periodic_task
 
 from utils.mailing.mail import mail
 
@@ -72,7 +72,7 @@ def check(username):
             if time == now_str:
 
                 import qrcode
-                img = qrcode.make(f'http://94.247.128.225/login/{username}/{now_str}')
+                img = qrcode.make(f'http://94.247.128.225/login/{username}/{task.id}')
                 img.save(f"static/{username}_qr.png")
 
                 return f"You can answer for time: {now_str}\nTask: {task.title}\n<a href=\"{url_for('static', filename = f'{username}_qr.png')}\">Login</a>"
@@ -80,9 +80,21 @@ def check(username):
     return f"You can NOT answer(((\nTasks:{p_tasks}\nTodays:{today_p_tasks}\nTime:{now_str}"
 
 
-@app.route("/login/<username>/<time>")
-def login(username, time):
-    return f"<h1>Hi {username}! Your time is {time}</h1>"
+@app.route("/login/<username>/<task_id>")
+def login(username, task_id):
+
+
+    task = get_periodic_task(task_id)
+
+    answer = "yes"
+
+    user = get_user(username=username, id = None)
+
+    value = "Пусто"
+
+    create_periodic_task_answer(task_id, user.id, answer, "text", value)
+
+    return f"<h1>Hi {username}! You answered for task \"{task.title}\".</h1>"
 
 
 
