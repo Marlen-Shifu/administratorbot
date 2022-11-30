@@ -11,6 +11,8 @@ from utils.mailing.mail import mail
 
 import qrcode
 
+import logging
+
 app = Flask(__name__, static_folder='static')
 
 
@@ -84,9 +86,9 @@ def check(username):
 
                 already_answered = user_is_answered(user, get_periodic_task_answers(task.id))
 
-                print(task.title)
-                print(now_str)
-                print(already_answered)
+                logging.info(task.title)
+                logging.info(now_str)
+                logging.info(already_answered)
 
 
                 if not already_answered:
