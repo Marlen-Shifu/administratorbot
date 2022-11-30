@@ -9,7 +9,7 @@
     {% for task in tasks_list %}
 
       <div class="task">
-        <a href="{{ url_for('task', username = username, task_id = task.id) }}"></a>
+        <a href="{{ url_for('task', username = username, task_id = task.id) }}">{{ task.title }}</a>
       </div>
 
     {% endfor %}

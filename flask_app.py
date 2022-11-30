@@ -100,7 +100,7 @@ def check(username):
                 #
                 #     return f"You have already answered for this task for this time"
 
-    return render_template('tasks_list.html', tasks_list = tasks_available_for_answer)
+    return render_template('tasks_list.html', tasks_list = tasks_available_for_answer, username = username)
 
 
 
