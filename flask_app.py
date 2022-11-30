@@ -84,6 +84,10 @@ def check(username):
 
                 already_answered = user_is_answered(user, get_periodic_task_answers(task.id))
 
+                print(task.title)
+                print(now_str)
+                print(already_answered)
+
 
                 if not already_answered:
                     #
