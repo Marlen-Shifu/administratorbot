@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список задач</title>
+</head>
+<body>
+  <div class="tasks_list">
+    {% for task in tasks_list %}
+
+      <div class="task">
+        <a href="{{ url_for('static', filename = f'{username}_qr.png') }}"></a>
+      </div>
+
+    {% endfor %}
+  </div>
+</body>
+</html>

@@ -5,9 +5,11 @@ from flask import Flask, url_for
 from flask import render_template
 
 from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks, get_periodic_task_users_of_user, \
-    get_user, get_periodic_tasks_of_user, create_periodic_task_answer, get_periodic_task
+    get_user, get_periodic_tasks_of_user, create_periodic_task_answer, get_periodic_task, get_periodic_task_answers
 
 from utils.mailing.mail import mail
+
+import qrcode
 
 app = Flask(__name__, static_folder='static')
 
@@ -40,7 +42,6 @@ def check(username):
             if task.current_state.split(':')[0] == 'work':
                 today_p_tasks.append(task)
 
-
     hour = now.hour
 
     if len(str(hour)) == 1:
@@ -64,6 +65,8 @@ def check(username):
 
     now_str = f"{hour}:{minute}"
 
+    tasks_available_for_answer = []
+
     for task in today_p_tasks:
 
         times = task.get_times_list()
@@ -71,18 +74,49 @@ def check(username):
         for time in times:
             if time == now_str:
 
-                import qrcode
-                img = qrcode.make(f'http://94.247.128.225/login/{username}/{task.id}')
-                img.save(f"static/{username}_qr.png")
+                def user_is_answered(user, answers_list):
+                    for task_answer in answers_list:
+                        if user.id == task_answer.user_id:
+                            if task_answer.time.date() == now.date() and task_answer.time.hour == hour and task_answer.time.minute == minute:
+                                return True
 
-                return f"You can answer for time: {now_str}\nTask: {task.title}\n<a href=\"{url_for('static', filename = f'{username}_qr.png')}\">Login</a>"
+                    return False
 
-    return f"You can NOT answer(((\nTasks:{p_tasks}\nTodays:{today_p_tasks}\nTime:{now_str}"
+                already_answered = user_is_answered(user, get_periodic_task_answers(task.id))
+
+
+                if not already_answered:
+                    #
+                    # img = qrcode.make(f'http://94.247.128.225/login/{username}/{task.id}')
+                    # img.save(f"static/{username}_qr.png")
+
+                    tasks_available_for_answer.append(task)
+
+                    break
+
+                    # return f"You can answer for time: {now_str}\nTask: {task.title}\n<a href=\"{url_for('static', filename = f'{username}_qr.png')}\">Login</a>"
+                #
+                # else:
+                #
+                #     return f"You have already answered for this task for this time"
+
+    return render_template('tasks_list.html', tasks_list = tasks_available_for_answer)
+
+
+
+    # return f"You can NOT answer(((\nTasks:{p_tasks}\nTodays:{today_p_tasks}\nTime:{now_str}"
+
+
+@app.route("/task/<username>/<task_id>")
+def task(username, task_id):
+
+
+    img = qrcode.make(f'http://94.247.128.225/login/{username}/{task.id}')
+    img.save(f"static/{username}_qr.png")
 
 
 @app.route("/login/<username>/<task_id>")
 def login(username, task_id):
-
 
     task = get_periodic_task(task_id)
 
