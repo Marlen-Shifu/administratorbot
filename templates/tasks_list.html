@@ -9,7 +9,7 @@
     {% for task in tasks_list %}
 
       <div class="task">
-        <a href="{{ url_for('static', filename = f'{username}_qr.png') }}"></a>
+        <a href="{{ url_for('task', username = username, task_id = task.id) }}"></a>
       </div>
 
     {% endfor %}

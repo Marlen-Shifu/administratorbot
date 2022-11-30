@@ -110,8 +110,7 @@ def check(username):
 @app.route("/task/<username>/<task_id>")
 def task(username, task_id):
 
-
-    img = qrcode.make(f'http://94.247.128.225/login/{username}/{task.id}')
+    img = qrcode.make(f'http://94.247.128.225/login/{username}/{task_id}')
     img.save(f"static/{username}_qr.png")
 
 
