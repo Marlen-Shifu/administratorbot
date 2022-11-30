@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask, url_for
+from flask import Flask, url_for, redirect
 
 from flask import render_template
 
@@ -112,6 +112,8 @@ def task(username, task_id):
 
     img = qrcode.make(f'http://94.247.128.225/login/{username}/{task_id}')
     img.save(f"static/{username}_qr.png")
+
+    return redirect(url_for('static', filename = f"{username}_qr.png"))
 
 
 @app.route("/login/<username>/<task_id>")
