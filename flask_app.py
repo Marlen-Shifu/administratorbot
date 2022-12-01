@@ -74,7 +74,10 @@ def check(username):
 
         times = task.get_times_list()
 
+
         for time in times:
+            logging.info(time)
+            logging.info(now_str)
             if time == now_str:
 
                 def user_is_answered(user, answers_list):
@@ -91,7 +94,7 @@ def check(username):
 
                     return False
 
-                already_answered = user_is_answered(user, get_periodic_task_answers_of_user(task.id, user_id=2))
+                already_answered = user_is_answered(user, get_periodic_task_answers(task.id))
 
                 logging.info(task.title)
                 logging.info(already_answered)
