@@ -101,7 +101,7 @@ def check(username):
 
                     tasks_available_for_answer.append(task)
 
-                    break
+                    continue
 
                     # return f"You can answer for time: {now_str}\nTask: {task.title}\n<a href=\"{url_for('static', filename = f'{username}_qr.png')}\">Login</a>"
                 #
