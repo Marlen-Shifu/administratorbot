@@ -76,18 +76,12 @@ def check(username):
 
 
         for time in times:
-            logging.info(time)
-            logging.info(now_str)
+
             if time == now_str:
 
                 def user_is_answered(user, answers_list):
                     for task_answer in answers_list:
-                        logging.info(task_answer.time.date())
-                        logging.info(now.date())
-                        logging.info(task_answer.time.hour)
-                        logging.info(hour)
-                        logging.info(task_answer.time.minute)
-                        logging.info(minute)
+
 
                         if task_answer.time.date() == now.date() and task_answer.time.hour == int(hour) and task_answer.time.minute == int(minute):
                             return True
