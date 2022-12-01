@@ -91,7 +91,7 @@ def check(username):
 
                     return False
 
-                already_answered = user_is_answered(user, get_periodic_task_answers_of_user(task.id, user_id=user.id))
+                already_answered = user_is_answered(user, get_periodic_task_answers_of_user(task.id, user_id=2))
 
                 if not already_answered:
                     #
