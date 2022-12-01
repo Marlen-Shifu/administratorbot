@@ -89,7 +89,7 @@ def check(username):
                         logging.info(task_answer.time.minute)
                         logging.info(minute)
 
-                        if task_answer.time.date() == now.date() and task_answer.time.hour == hour and task_answer.time.minute == minute:
+                        if task_answer.time.date() == now.date() and task_answer.time.hour == int(hour) and task_answer.time.minute == int(minute):
                             return True
 
                     return False
