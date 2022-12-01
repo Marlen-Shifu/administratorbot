@@ -28,7 +28,7 @@ def home():
 @app.route("/username/<username>")
 def check(username):
 
-    now = datetime.datetime.now() + datetime.timedelta(hours=6)
+    now = datetime.datetime.now()
 
     user = get_user(None, username=username)
 
