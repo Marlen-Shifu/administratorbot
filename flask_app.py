@@ -6,7 +6,7 @@ from flask import render_template
 
 from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks, get_periodic_task_users_of_user, \
     get_user, get_periodic_tasks_of_user, create_periodic_task_answer, get_periodic_task, get_periodic_task_answers, \
-    get_periodic_task_user_answer
+    get_periodic_task_user_answer, get_periodic_task_answers_of_user
 
 from utils.mailing.mail import mail
 
@@ -91,7 +91,7 @@ def check(username):
 
                     return False
 
-                already_answered = user_is_answered(user, get_periodic_task_user_answer(task.id, user_id=user.id))
+                already_answered = user_is_answered(user, get_periodic_task_answers_of_user(task.id, user_id=user.id))
 
                 if not already_answered:
                     #

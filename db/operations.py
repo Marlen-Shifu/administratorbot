@@ -383,6 +383,17 @@ def get_periodic_task_answers(task_id):
         print(e)
         raise e
 
+
+def get_periodic_task_answers_of_user(task_id, user_id):
+    try:
+        answers = s.query(PeriodicTaskAnswer).filter_by(task_id = task_id, user_id = user_id).all()
+
+        return answers
+    except Exception as e:
+        print(e)
+        raise e
+
+
 def create_onetime_task_answer(task_id, user_id, answer,type, value):
     try:
 
