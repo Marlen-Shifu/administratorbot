@@ -5,7 +5,8 @@ from flask import Flask, url_for, redirect
 from flask import render_template
 
 from db.operations import get_all_workers, get_periodic_tasks, get_onetime_tasks, get_periodic_task_users_of_user, \
-    get_user, get_periodic_tasks_of_user, create_periodic_task_answer, get_periodic_task, get_periodic_task_answers
+    get_user, get_periodic_tasks_of_user, create_periodic_task_answer, get_periodic_task, get_periodic_task_answers, \
+    get_periodic_task_user_answer
 
 from utils.mailing.mail import mail
 
@@ -78,18 +79,19 @@ def check(username):
 
                 def user_is_answered(user, answers_list):
                     for task_answer in answers_list:
-                        if user.id == task_answer.user_id:
-                            if task_answer.time.date() == now.date() and task_answer.time.hour == hour and task_answer.time.minute == minute:
-                                return True
+                        logging.info(task_answer.time.date())
+                        logging.info(now.date())
+                        logging.info(task_answer.time.hour)
+                        logging.info(hour)
+                        logging.info(task_answer.time.minute)
+                        logging.info(minute)
+
+                        if task_answer.time.date() == now.date() and task_answer.time.hour == hour and task_answer.time.minute == minute:
+                            return True
 
                     return False
 
-                already_answered = user_is_answered(user, get_periodic_task_answers(task.id))
-
-                logging.info(task.title)
-                logging.info(now_str)
-                logging.info(already_answered)
-
+                already_answered = user_is_answered(user, get_periodic_task_user_answer(task.id, user_id=user.id))
 
                 if not already_answered:
                     #
