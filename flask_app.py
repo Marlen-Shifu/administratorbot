@@ -93,10 +93,14 @@ def check(username):
 
                 already_answered = user_is_answered(user, get_periodic_task_answers_of_user(task.id, user_id=2))
 
+                logging.info(task.title)
+                logging.info(already_answered)
+
                 if not already_answered:
                     #
                     # img = qrcode.make(f'http://94.247.128.225/login/{username}/{task.id}')
                     # img.save(f"static/{username}_qr.png")
+                    logging.info(tasks_available_for_answer)
 
                     tasks_available_for_answer.append(task)
 
