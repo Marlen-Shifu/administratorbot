@@ -32,7 +32,7 @@ def check(username):
 
     user = get_user(None, username=username)
 
-    p_tasks = get_periodic_tasks_of_user(2)
+    p_tasks = get_periodic_tasks_of_user(user_id=user.id)
 
     today_p_tasks = []
 
