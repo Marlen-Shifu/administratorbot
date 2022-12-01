@@ -29,10 +29,14 @@ def home():
 def check(username):
 
     now = datetime.datetime.now() + datetime.timedelta(hours=6)
+    logging.info(now)
 
     user = get_user(None, username=username)
+    logging.info(user.user_id)
+    logging.info(user.username)
 
     p_tasks = get_periodic_tasks_of_user(user_id=user.id)
+    logging.info(p_tasks)
 
     today_p_tasks = []
 
@@ -44,6 +48,7 @@ def check(username):
         else:
             if task.current_state.split(':')[0] == 'work':
                 today_p_tasks.append(task)
+    logging.info(today_p_tasks)
 
     hour = now.hour
 
@@ -67,6 +72,7 @@ def check(username):
         minute = str(minute)
 
     now_str = f"{hour}:{minute}"
+    logging.info(now_str)
 
     tasks_available_for_answer = []
 
@@ -88,7 +94,7 @@ def check(username):
                     return False
 
                 already_answered = user_is_answered(user, get_periodic_task_answers(task.id))
-
+                logging.info(already_answered)
 
                 if not already_answered:
                     #
@@ -104,6 +110,7 @@ def check(username):
                 # else:
                 #
                 #     return f"You have already answered for this task for this time"
+    logging.info(tasks_available_for_answer)
 
     return render_template('tasks_list.html', tasks_list = tasks_available_for_answer, username = username)
 
