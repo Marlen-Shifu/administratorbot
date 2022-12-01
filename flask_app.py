@@ -81,10 +81,9 @@ def check(username):
 
                 def user_is_answered(user, answers_list):
                     for task_answer in answers_list:
-
-
-                        if task_answer.time.date() == now.date() and task_answer.time.hour == int(hour) and task_answer.time.minute == int(minute):
-                            return True
+                        if task_answer.user_id == user.id:
+                            if task_answer.time.date() == now.date() and task_answer.time.hour == int(hour) and task_answer.time.minute == int(minute):
+                                return True
 
                     return False
 
